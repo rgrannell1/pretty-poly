@@ -77,6 +77,29 @@ func BenchmarkGeohash2dAsUint64 (bench *testing.B) {
 
 
 
+func BenchmarkUint64AsGeohash2d (bench *testing.B) {
+
+	interval := Interval2d(0, 60000, 0, 60000)
+	point    := point {
+		x: 30000,
+		y: 30000,
+	}
+
+	geohash := Geohash2d(8, interval, point)
+	hashInt := Geohash2dAsUint64(geohash)
+
+	bench.StartTimer( )
+
+	for ith := 0; ith < bench.N; ith++ {
+		uint64AsGeohash2d(8, hashInt)
+	}
+
+}
+
+
+
+
+
 func TestGeohashCreation (test *testing.T) {
 
 	gob       := goblin.Goblin(test)

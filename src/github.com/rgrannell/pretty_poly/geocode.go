@@ -1,6 +1,7 @@
 
 package pretty_poly
 
+import "math"
 
 
 
@@ -133,8 +134,42 @@ func Geohash2dAsUint64 (hash geohash2d) uint64 {
 
 
 
-func uint64AsGeohash2d (precision int8, hash geohash2d) {
+func uint64AsGeohash2d (precision int8, hash uint64) geohash2d {
 
+	digits := int8(math.Ceil( math.Log2(float64(hash)) ))
 
+	xs := [ ] bool{ }
+	ys := [ ] bool{ }
+
+	var sw int
+
+	if (digits < precision) {
+
+		sw = 0
+
+		for ith := int8(0); ith < (precision - int8(digits)); ith++ {
+
+			if sw % 2 == 0 {
+				xs = append(xs, false)
+			} else {
+				ys = append(ys, false)
+			}
+
+			sw++
+
+		}
+
+	}
+
+	sw = 0
+
+	for ith := (digits - 1); ith >= 0; ith++ {
+
+	}
+
+	return geohash2d {
+		xs: xs,
+		ys: ys,
+	}
 
 }
