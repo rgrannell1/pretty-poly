@@ -27,7 +27,7 @@ func toCompanionMatrix (coeffs [ ] float64) *mat64.Dense {
 
 }
 
-func solvePolynomial (matrix *mat64.Dense) [] complex128 {
+func solvePolynomial (matrix *mat64.Dense) [ ] complex128 {
 
 	var eigen mat64.Eigen
 	eigen.Factorize(matrix, false)

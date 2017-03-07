@@ -148,7 +148,6 @@ func TestGeohashCreation (test *testing.T) {
 			gob.It("generates the expected output value", func ( ) {
 
 				for ith := 0; ith < len(testCase.result); ith++ {
-					result = result
 					gob.Assert(testCase.result[ith]).Equal(result.values[ith])
 				}
 
@@ -181,7 +180,6 @@ func TestGeohashCreation (test *testing.T) {
 			gob.It("generates the expected output value", func ( ) {
 
 				for ith := 0; ith < len(testCase.result); ith++ {
-					result = result
 					gob.Assert(testCase.result[ith]).Equal(result.xs[ith])
 					gob.Assert(testCase.result[ith]).Equal(result.ys[ith])
 				}

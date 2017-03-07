@@ -17,9 +17,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Roadmap
 
-- [ ] automate testing and benchmarking.
+- [x] automate testing and benchmarking.
 - [ ] automate go-package installs.
-- [ ] implement function to generate coordinate space.
-- [ ] implement function to solve companion matrix.
+- [x] implement function to generate coordinate space.
+- [x] implement function to solve companion matrix.
 - [ ] design root writes and reads.
+- [ ] implement parallel solutions.
 - [ ] benchmark parallel solutions.
+- [ ] implement geohashing.
+- [ ] implement concurrent solving.
