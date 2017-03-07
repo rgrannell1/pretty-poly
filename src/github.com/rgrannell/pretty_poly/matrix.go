@@ -9,7 +9,7 @@ import "github.com/gonum/matrix/mat64"
 
 
 
-func toCompanionMatrix (coeffs [ ] float64) mat64.Dense {
+func toCompanionMatrix (coeffs [ ] float64) *mat64.Dense {
 
 	matrix := mat64.NewDense(len(coeffs), len(coeffs), nil)
 
@@ -23,6 +23,15 @@ func toCompanionMatrix (coeffs [ ] float64) mat64.Dense {
 
 	}
 
-	return *matrix
+	return matrix
+
+}
+
+func solvePolynomial (matrix *mat64.Dense) [] complex128 {
+
+	var eigen mat64.Eigen
+	eigen.Factorize(matrix, false)
+
+	return eigen.Values(nil)
 
 }

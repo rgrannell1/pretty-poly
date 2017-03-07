@@ -28,6 +28,8 @@ func BenchmarkGeohash (bench *testing.B) {
 
 	var _ geohash
 
+	bench.StartTimer( )
+
 	for ith := 0; ith < bench.N; ith++ {
 		_ = Geohash(8, interval, 30000)
 	}
@@ -48,6 +50,8 @@ func BenchmarkGeohash2d (bench *testing.B) {
 
 	var _ geohash
 
+	bench.StartTimer( )
+
 	for ith := 0; ith < bench.N; ith++ {
 		_ = Geohash2d(8, interval, point)
 	}
@@ -67,8 +71,10 @@ func BenchmarkGeohash2dAsUint64 (bench *testing.B) {
 
 	geohash := Geohash2d(8, interval, point)
 
+	bench.StartTimer( )
+
 	for ith := 0; ith < bench.N; ith++ {
-		_    = Geohash2dAsUint64(geohash)
+		_ = Geohash2dAsUint64(geohash)
 	}
 
 }

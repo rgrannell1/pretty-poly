@@ -17,8 +17,25 @@ func BenchmarkToCompanionMatrix (bench *testing.B) {
 
 	bases := [ ] float64 {100, 100, 100, 100, 100}
 
+	bench.StartTimer( )
+
 	for ith := 0; ith < bench.N; ith++ {
 		toCompanionMatrix(bases)
+	}
+
+}
+
+
+
+
+func BenchmarkSolvePolynomial (bench *testing.B) {
+
+	bases := [ ] float64 {100, 100, 100, 100, 100}
+
+	bench.StartTimer( )
+
+	for ith := 0; ith < bench.N; ith++ {
+		solvePolynomial(toCompanionMatrix(bases))
 	}
 
 }
@@ -32,7 +49,7 @@ func TestToCompanionMatrix (test *testing.T) {
 	var coord0     float64
 	var coord1     float64
 	var coeff      [ ]float64
-	var polyMatrix mat64.Dense
+	var polyMatrix *mat64.Dense
 
 	gob := goblin.Goblin(test)
 

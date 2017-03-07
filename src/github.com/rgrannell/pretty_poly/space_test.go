@@ -24,6 +24,8 @@ func BenchmarkToMixedRadix (bench *testing.B) {
 
 	bases := [ ] int {100, 100, 100, 100, 100}
 
+	bench.StartTimer( )
+
 	for ith := 0; ith < bench.N; ith++ {
 		toMixedRadix(bases, 100)
 	}
