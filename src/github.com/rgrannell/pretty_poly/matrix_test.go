@@ -6,7 +6,6 @@ package pretty_poly
 
 
 import "testing"
-import "math/rand"
 import "github.com/franela/goblin"
 import "github.com/gonum/matrix/mat64"
 
@@ -39,20 +38,16 @@ func TestToCompanionMatrix (test *testing.T) {
 
 	gob.Describe("to companion matrix", func ( ) {
 
-		gob.It("....", func ( ) {
+		gob.It("constructs the expected matrices", func ( ) {
 
-			for ith := 0; ith < 100; ith++ {
+			coord0     = float64(+10)
+			coord1     = float64(-10)
 
-				coord0     = rand.Float64( )
-				coord1     = rand.Float64( )
+			coeff      = [ ]float64{ coord0, coord1 }
+			polyMatrix = toCompanionMatrix(coeff)
 
-				coeff      = [ ]float64{ coord0, coord1 }
-				polyMatrix = toCompanionMatrix(coeff)
-
-				gob.Assert(polyMatrix.At(0, 1)).Equal(-coord0)
-				gob.Assert(polyMatrix.At(1, 1)).Equal(-coord1)
-
-			}
+			gob.Assert(polyMatrix.At(0, 1)).Equal(-coord0)
+			gob.Assert(polyMatrix.At(1, 1)).Equal(-coord1)
 
 		})
 
