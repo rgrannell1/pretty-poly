@@ -105,7 +105,7 @@ func BenchmarkUint64AsGeohash2d (bench *testing.B) {
 
 
 
-func runEqualityGeohashTest (gob *goblin.G, testCase geoHashTestCase) {
+func runGeohashEqualityGeohashTest (gob *goblin.G, testCase geoHashTestCase) {
 
 	result := Geohash(testCase.precision, testCase.interval, testCase.num)
 
@@ -118,6 +118,37 @@ func runEqualityGeohashTest (gob *goblin.G, testCase geoHashTestCase) {
 	})
 
 }
+
+func runGeohash2dEqualityGeohashTest (gob *goblin.G, testCase geoHashTestCase) {
+
+	testInterval2d := interval2d {
+		x: testCase.interval,
+		y: testCase.interval,
+	}
+
+	testPoint := point2d {
+		x: testCase.num,
+		y: testCase.num,
+	}
+
+	result := Geohash2d(testCase.precision, testInterval2d, testPoint)
+
+	gob.It("has the expected x length", func ( ) {
+		gob.Assert(len(result.xs)).Equal(len(testCase.result.values))
+	})
+
+	gob.It("has the expected y length", func ( ) {
+		gob.Assert(len(result.ys)).Equal(len(testCase.result.values))
+	})
+
+
+//	gob.It("generates the expected output value", func ( ) {
+//		gob.Assert(result).Equal(testCase.result)
+//	})
+
+
+}
+
 
 
 
@@ -180,46 +211,21 @@ func TestGeohashCreation (test *testing.T) {
 
 	gob.Describe("Geohash", func ( ) {
 
-		runEqualityGeohashTest(gob, testCase0)
-		runEqualityGeohashTest(gob, testCase1)
-		runEqualityGeohashTest(gob, testCase2)
-		runEqualityGeohashTest(gob, testCase3)
+		runGeohashEqualityGeohashTest(gob, testCase0)
+		runGeohashEqualityGeohashTest(gob, testCase1)
+		runGeohashEqualityGeohashTest(gob, testCase2)
+		runGeohashEqualityGeohashTest(gob, testCase3)
 
 	})
-
-	/*
 
 	gob.Describe("Geohash2d", func ( ) {
 
-		//var result         geohash2d
-		var testInterval2d interval2d
-		var testPoint      point
-
-		for _, testCase := range getTestCases( ) {
-
-			testInterval2d = interval2d {
-				x: testCase.interval,
-				y: testCase.interval,
-			}
-
-			testPoint = point2d {
-				x: testCase.num,
-				y: testCase.num,
-			}
-
-			_ = Geohash2d(testCase.precision, testInterval2d, testPoint)
-
-			gob.It("generates the expected output value", func ( ) {
-
-
-			})
-
-		}
+		runGeohash2dEqualityGeohashTest(gob, testCase0)
+		runGeohash2dEqualityGeohashTest(gob, testCase1)
+		runGeohash2dEqualityGeohashTest(gob, testCase2)
+		runGeohash2dEqualityGeohashTest(gob, testCase3)
 
 	})
-
-	*/
-
 
 }
 
