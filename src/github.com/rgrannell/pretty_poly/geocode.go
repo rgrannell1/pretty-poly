@@ -2,7 +2,6 @@
 package pretty_poly
 
 import "math"
-import "fmt"
 
 
 
@@ -109,34 +108,23 @@ func Geohash (precision int8, interval interval, num float64) geohash {
 
 	values := make([ ]bool, precision, precision)
 
-	if precision == 0 {
-
-	}
-
-	lower := interval.lower
-	upper := interval.upper
-
+	var isUpperBucket bool
 	var pivot float64
 
-	for digitPlace := 0; digitPlace < int(precision); digitPlace++ {
+	for ith := 0; ith < int(precision); ith++ {
 
-		pivot = (upper - lower) / 2.0
+		pivot         = (interval.upper - interval.lower) / 2.0
+		isUpperBucket = num > pivot
 
-		if num > pivot {
+		values[ith] = isUpperBucket
 
-			values[digitPlace] = true
-			lower = (lower + pivot)
-
+		if isUpperBucket {
+			interval.lower += pivot
 		} else {
-
-			values[digitPlace] = false
-			upper = (upper - pivot)
-
+			interval.upper -= pivot
 		}
 
 	}
-
-	fmt.Println(" " )
 
 	return geohash {
 		values: values,
