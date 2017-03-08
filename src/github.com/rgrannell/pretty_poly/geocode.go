@@ -129,6 +129,14 @@ func Geohash2d (precision int8, interval interval2d, point2d point2d) geohash2d 
 
 }
 
+func (hash0 *geohash) AddYAxis (hash1 geohash) geohash2d {
+	return geohash2d {
+		xs: hash0.values,
+		ys: hash1.values,
+	}
+}
+
+
 
 
 

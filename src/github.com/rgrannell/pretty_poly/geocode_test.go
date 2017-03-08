@@ -141,10 +141,11 @@ func runGeohash2dEqualityGeohashTest (gob *goblin.G, testCase geoHashTestCase) {
 		gob.Assert(len(result.ys)).Equal(len(testCase.result.values))
 	})
 
+	square := testCase.result.AddYAxis(testCase.result)
 
-//	gob.It("generates the expected output value", func ( ) {
-//		gob.Assert(result).Equal(testCase.result)
-//	})
+	gob.It("generates the expected output value", func ( ) {
+		gob.Assert(result).Equal(square)
+	})
 
 
 }
