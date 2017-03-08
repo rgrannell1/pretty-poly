@@ -78,7 +78,7 @@ func Geohash (precision int8, interval interval, num float64) geohash {
 
 	for ith := 0; ith < int(precision); ith++ {
 
-		pivot         = (interval.upper - interval.lower) / 2.0
+		pivot         = interval.lower + ((interval.upper - interval.lower) / 2.0)
 		isUpperBucket = num > pivot
 
 		values[ith] = isUpperBucket

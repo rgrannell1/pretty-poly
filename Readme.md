@@ -27,3 +27,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 - [ ] implement geohashing.
 - [ ] implement -n,...,+n space-exploration instead of 0...n
 - [ ] implement error-handling
+- [ ] add godoc
