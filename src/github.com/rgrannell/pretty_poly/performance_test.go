@@ -12,29 +12,57 @@ import "testing"
 
 
 func BenchmarkSolving1 (bench *testing.B) {
-	foo(10, 6, 1)
+
+	for ith := 0; ith < bench.N; ith++ {
+		foo(5, 5, 1)
+	}
+
 }
 
 func BenchmarkSolving2 (bench *testing.B) {
-	foo(10, 6, 2)
+
+	for ith := 0; ith < bench.N; ith++ {
+		foo(5, 5, 2)
+	}
+
 }
 
 func BenchmarkSolving4 (bench *testing.B) {
-	foo(10, 6, 4)
+
+	for ith := 0; ith < bench.N; ith++ {
+		foo(5, 5, 4)
+	}
+
 }
 
 func BenchmarkSolving8 (bench *testing.B) {
-	foo(10, 6, 8)
+
+	for ith := 0; ith < bench.N; ith++ {
+		foo(5, 5, 8)
+	}
+
 }
 
 func BenchmarkSolving16 (bench *testing.B) {
-	foo(10, 6, 16)
+
+	for ith := 0; ith < bench.N; ith++ {
+		foo(5, 5, 16)
+	}
+
 }
 
 func BenchmarkSolving32 (bench *testing.B) {
-	foo(10, 6, 32)
+
+	for ith := 0; ith < bench.N; ith++ {
+		foo(5, 5, 32)
+	}
+
 }
 
 func BenchmarkSolving64 (bench *testing.B) {
-	foo(10, 6, 64)
+
+	for ith := 0; ith < bench.N; ith++ {
+		foo(5, 5, 64)
+	}
+
 }

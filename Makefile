@@ -20,7 +20,7 @@ bench: setGoPath
 	go build github.com/rgrannell/pretty_poly
 	go install github.com/rgrannell/pretty_poly
 
-	go test github.com/rgrannell/pretty_poly -v -bench . -cover -benchmem -test.run Benchmark
+	go test github.com/rgrannell/pretty_poly -v -bench . -cover -benchmem -test.run Benchmark -count 2
 
 vet: setGoPath
 	go vet github.com/rgrannell/pretty_poly

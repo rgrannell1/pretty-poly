@@ -9,7 +9,7 @@ import "github.com/gonum/matrix/mat64"
 
 
 
-func toCompanionMatrix (coeffs [ ] float64) *mat64.Dense {
+func toCompanionMatrix (coeffs [ ] float64, offset float64) *mat64.Dense {
 
 	matrix := mat64.NewDense(len(coeffs), len(coeffs), nil)
 
@@ -19,7 +19,7 @@ func toCompanionMatrix (coeffs [ ] float64) *mat64.Dense {
 			matrix.Set(ith, ith - 1, 1)
 		}
 
-		matrix.Set(ith, len(coeffs) - 1, -coeffs[ith])
+		matrix.Set(ith, len(coeffs) - 1, -(coeffs[ith] - offset))
 
 	}
 

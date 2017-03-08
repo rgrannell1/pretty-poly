@@ -6,8 +6,53 @@ import "sync"
 
 
 
+type appArguments struct {
+
+	precision  int8
+	dimensions interval2d
+
+}
+
+
+
+
+func processSolution (solution complex128, args appArguments) geohash2d {
+
+	argandPoint := point {
+		x: real(solution),
+		y: imag(solution),
+	}
+
+	return Geohash2d(args.precision, args.dimensions, argandPoint)
+
+}
+
+
+
+
+func writeSolutions (solutionsChannel chan [ ] complex128, args appArguments) {
+
+	for solutions := range solutionsChannel {
+		for _, solution := range solutions {
+
+			processSolution(solution, args)
+
+		}
+	}
+
+	close(solutionsChannel)
+
+}
+
+
+
 
 func foo (extreme int, order int, processes int) {
+
+	args := appArguments {
+		precision:  8,
+		dimensions: Interval2d(0, 60000, 0, 6000),
+	}
 
 	var waitGroup sync.WaitGroup
 
@@ -17,11 +62,11 @@ func foo (extreme int, order int, processes int) {
 		bases = append(bases, extreme)
 	}
 
-	solutions := make(chan [ ] complex128)
-	outBases  := make([ ] int, order)
+	solutions     := make(chan [ ] complex128)
+	exploredBases := make([ ] int, order)
 
 	for ith := 0; ith < order; ith++ {
-		outBases[ith] = extreme
+		exploredBases[ith] = (2 * extreme) + 1
 	}
 
 	waitGroup.Add(processes)
@@ -32,25 +77,18 @@ func foo (extreme int, order int, processes int) {
 
 			defer waitGroup.Done( )
 
-			coefficientCount := productOf(outBases)
+			coefficientCount := productOf(exploredBases)
 
 			for ith := offset; ith < coefficientCount; ith += processes {
-				solutions <- solvePolynomial( toCompanionMatrix(toMixedRadix(outBases, ith)) )
+				solutions <- solvePolynomial( toCompanionMatrix(toMixedRadix(exploredBases, ith), float64(extreme)) )
 			}
 
 		}(offset)
 
 	}
 
-	go func ( ) {
-
-		for _ = range solutions {
-
-		}
-
-	}( )
+	go writeSolutions(solutions, args)
 
 	waitGroup.Wait( )
-	close(solutions)
 
 }

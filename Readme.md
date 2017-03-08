@@ -22,7 +22,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 - [x] implement function to generate coordinate space.
 - [x] implement function to solve companion matrix.
 - [ ] design root writes and reads.
-- [ ] implement parallel solutions.
-- [ ] benchmark parallel solutions.
+- [x] implement parallel solutions.
+- [x] benchmark parallel solutions.
 - [ ] implement geohashing.
-- [ ] implement concurrent solving.
+- [ ] implement -n,...,+n space-exploration instead of 0...n

@@ -20,7 +20,7 @@ func BenchmarkToCompanionMatrix (bench *testing.B) {
 	bench.StartTimer( )
 
 	for ith := 0; ith < bench.N; ith++ {
-		toCompanionMatrix(bases)
+		toCompanionMatrix(bases, 0)
 	}
 
 }
@@ -35,7 +35,7 @@ func BenchmarkSolvePolynomial (bench *testing.B) {
 	bench.StartTimer( )
 
 	for ith := 0; ith < bench.N; ith++ {
-		solvePolynomial(toCompanionMatrix(bases))
+		solvePolynomial(toCompanionMatrix(bases, 0))
 	}
 
 }
@@ -61,10 +61,10 @@ func TestToCompanionMatrix (test *testing.T) {
 			coord1     = float64(-10)
 
 			coeff      = [ ]float64{ coord0, coord1 }
-			polyMatrix = toCompanionMatrix(coeff)
+			polyMatrix = toCompanionMatrix(coeff, 3)
 
-			gob.Assert(polyMatrix.At(0, 1)).Equal(-coord0)
-			gob.Assert(polyMatrix.At(1, 1)).Equal(-coord1)
+			gob.Assert(polyMatrix.At(0, 1)).Equal(-(coord0 - 3))
+			gob.Assert(polyMatrix.At(1, 1)).Equal(-(coord1 - 3))
 
 		})
 
