@@ -2,7 +2,6 @@
 package pretty_poly
 
 import "fmt"
-import "reflect"
 
 
 
@@ -17,8 +16,67 @@ type geoHashTestCase struct {
 	precision int8
 	interval  interval
 	num       float64
-	result    [ ] bool
+	result    geohash
 }
+
+
+
+
+func getTestCases ( ) [ ] geoHashTestCase {
+
+	return [ ] geoHashTestCase {
+
+		geoHashTestCase {
+			precision: 1,
+			interval:  Interval(0, 1),
+			num:       0.5,
+			result:   geohash {
+				values: [ ] bool {
+					false,
+				},
+			},
+		},
+		geoHashTestCase {
+			precision: 1,
+			interval:  Interval(0, 1),
+			num:       0.55,
+			result:   geohash {
+				values: [ ] bool {
+					true,
+				},
+			},
+		},
+		geoHashTestCase {
+			precision: 5,
+			interval:  Interval(0, 1),
+			num:       1e-7,
+			result:   geohash {
+				values: [ ] bool {
+					false,
+					false,
+					false,
+					false,
+					false,
+				},
+			},
+		},
+		geoHashTestCase {
+			precision: 2,
+			interval:  Interval(0, 1),
+			num:       0.7,
+			result:   geohash {
+				values: [ ] bool {
+					true,
+					false,
+				},
+			},
+		},
+	}
+
+}
+
+
+
 
 
 
@@ -110,46 +168,25 @@ func BenchmarkUint64AsGeohash2d (bench *testing.B) {
 
 func TestGeohashCreation (test *testing.T) {
 
-	gob       := goblin.Goblin(test)
-	testCases := [ ] geoHashTestCase {
-
-		geoHashTestCase {
-			precision: 1,
-			interval:  Interval(0, 2),
-			num:       0.1,
-			result:   [ ] bool {false},
-		},
-		geoHashTestCase {
-			precision: 1,
-			interval:  Interval(0, 2),
-			num:       2,
-			result:   [ ] bool {true},
-		},
-		geoHashTestCase {
-			precision: 5,
-			interval:  Interval(0, 100),
-			num:       0,
-			result:   [ ] bool {false, false, false, false, false},
-		},
-		geoHashTestCase {
-			precision: 2,
-			interval:  Interval(0, 100),
-			num:       51,
-			result:   [ ] bool {true, false},
-		},
-	}
+	gob := goblin.Goblin(test)
 
 	gob.Describe("Geohash", func ( ) {
 
 		var result geohash
 
-		for _, testCase := range testCases {
+		for _, testCase := range getTestCases( ) {
 
 			result = Geohash(testCase.precision, testCase.interval, testCase.num)
 
+			gob.It("has the expected length", func ( ) {
+				gob.Assert(len(result.values)).Equal(len(testCase.result.values))
+			})
+
 			gob.It("generates the expected output value", func ( ) {
 
-				gob.Assert(reflect.DeepEqual(result.values, testCase.result)).Equal(true)
+				gob.Assert(result).Equal(testCase.result)
+
+				fmt.Println("asd")
 
 			})
 
@@ -163,7 +200,7 @@ func TestGeohashCreation (test *testing.T) {
 		var testInterval2d interval2d
 		var testPoint      point
 
-		for _, testCase := range testCases {
+		for _, testCase := range getTestCases( ) {
 
 			testInterval2d = interval2d {
 				x: testCase.interval,
@@ -179,9 +216,6 @@ func TestGeohashCreation (test *testing.T) {
 
 			gob.It("generates the expected output value", func ( ) {
 
-				for ith := 0; ith < len(testCase.result); ith++ {
-
-				}
 
 			})
 
@@ -198,33 +232,6 @@ func TestGeohashCreation (test *testing.T) {
 func TestGeohashIdempotency (test *testing.T) {
 
 	gob       := goblin.Goblin(test)
-	testCases := [ ] geoHashTestCase {
-
-		geoHashTestCase {
-			precision: 1,
-			interval:  Interval(0, 2),
-			num:       0,
-			result:   [ ] bool {false},
-		},
-		geoHashTestCase {
-			precision: 1,
-			interval:  Interval(0, 2),
-			num:       2,
-			result:   [ ] bool {true},
-		},
-		geoHashTestCase {
-			precision: 5,
-			interval:  Interval(0, 100),
-			num:       0,
-			result:   [ ] bool {false, false, false, false, false},
-		},
-		geoHashTestCase {
-			precision: 2,
-			interval:  Interval(0, 100),
-			num:       51,
-			result:   [ ] bool {true, false},
-		},
-	}
 
 	gob.Describe("Geohash", func ( ) {
 
@@ -234,7 +241,7 @@ func TestGeohashIdempotency (test *testing.T) {
 		var testInterval2d interval2d
 		var testPoint      point
 
-		for _, testCase := range testCases {
+		for _, testCase := range getTestCases( ) {
 
 			testInterval2d = interval2d {
 				x: testCase.interval,
@@ -250,8 +257,7 @@ func TestGeohashIdempotency (test *testing.T) {
 			uintConversion = Geohash2dAsUint64(geohash)
 			geohash2       = uint64AsGeohash2d(testCase.precision, uintConversion)
 
-			foo := geohash.Compare(geohash2)
-			fmt.Printf("%d\n", foo)
+			_ = geohash2
 
 		}
 

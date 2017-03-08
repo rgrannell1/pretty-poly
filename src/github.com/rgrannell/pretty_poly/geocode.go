@@ -148,13 +148,6 @@ func Geohash (precision int8, interval interval, num float64) geohash {
 
 
 
-func (geohash0 geohash2d) Compare(geohash1 geohash2d) int {
-
-	// TODO
-	return 0
-
-}
-
 func Geohash2d (precision int8, interval interval2d, point point) geohash2d {
 
 	return geohash2d {
