@@ -18,7 +18,7 @@ type appArguments struct {
 
 func processSolution (solution complex128, args appArguments) geohash2d {
 
-	argandPoint := point {
+	argandPoint := point2d {
 		x: real(solution),
 		y: imag(solution),
 	}

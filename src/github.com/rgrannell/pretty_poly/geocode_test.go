@@ -43,7 +43,7 @@ func BenchmarkGeohash (bench *testing.B) {
 func BenchmarkGeohash2d (bench *testing.B) {
 
 	interval := Interval2d(0, 60000, 0, 60000)
-	point    := point {
+	point    := point2d {
 		x: 30000,
 		y: 30000,
 	}
@@ -64,7 +64,7 @@ func BenchmarkGeohash2d (bench *testing.B) {
 func BenchmarkGeohash2dAsUint64 (bench *testing.B) {
 
 	interval := Interval2d(0, 60000, 0, 60000)
-	point    := point {
+	point    := point2d {
 		x: 30000,
 		y: 30000,
 	}
@@ -86,7 +86,7 @@ func BenchmarkGeohash2dAsUint64 (bench *testing.B) {
 func BenchmarkUint64AsGeohash2d (bench *testing.B) {
 
 	interval := Interval2d(0, 60000, 0, 60000)
-	point    := point {
+	point    := point2d {
 		x: 30000,
 		y: 30000,
 	}
@@ -202,7 +202,7 @@ func TestGeohashCreation (test *testing.T) {
 				y: testCase.interval,
 			}
 
-			testPoint = point {
+			testPoint = point2d {
 				x: testCase.num,
 				y: testCase.num,
 			}
@@ -246,7 +246,7 @@ func TestGeohashIdempotency (test *testing.T) {
 				y: testCase.interval,
 			}
 
-			testPoint = point {
+			testPoint = point2d {
 				x: testCase.num,
 				y: testCase.num,
 			}

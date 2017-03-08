@@ -25,7 +25,7 @@ type interval2d struct {
 	y interval
 }
 
-type point struct {
+type point2d struct {
 	x float64
 	y float64
 }
@@ -33,22 +33,6 @@ type point struct {
 
 
 
-func (interval0 interval) Compare(interval1 interval) int {
-
-	diff0 := interval0.upper - interval0.upper
-	diff1 := interval1.upper - interval1.upper
-
-	if diff0 > diff1 {
-		return 1
-	}
-
-	if diff0 < diff1 {
-		return 0
-	}
-
-	return 0
-
-}
 
 func Interval (lower float64, upper float64) interval {
 
@@ -56,25 +40,6 @@ func Interval (lower float64, upper float64) interval {
 		lower: lower,
 		upper: upper,
 	}
-
-}
-
-
-
-
-
-func (interval0 interval2d) Compare(interval1 interval2d) int {
-
-	compareX := interval0.x.Compare(interval1.x)
-	compareY := interval0.y.Compare(interval1.y)
-
-	if (compareX == 0 && compareY == 0) {
-		return 0
-	}
-
-	return 0
-
-	// TODO
 
 }
 
@@ -136,11 +101,30 @@ func Geohash (precision int8, interval interval, num float64) geohash {
 
 
 
-func Geohash2d (precision int8, interval interval2d, point point) geohash2d {
+
+func (hash0 geohash2d) Equal(hash1 geohash2d) bool {
+
+	for ith := 0; ith < len(hash0.xs); ith++ {
+		if hash0.xs[ith] != hash1.xs[ith] {
+			return false
+		}
+	}
+
+	for ith := 0; ith < len(hash0.ys); ith++ {
+		if hash0.ys[ith] != hash1.ys[ith] {
+			return false
+		}
+	}
+
+	return true
+
+}
+
+func Geohash2d (precision int8, interval interval2d, point2d point2d) geohash2d {
 
 	return geohash2d {
-		xs: Geohash(precision, interval.x, point.x).values,
-		ys: Geohash(precision, interval.y, point.y).values,
+		xs: Geohash(precision, interval.x, point2d.x).values,
+		ys: Geohash(precision, interval.y, point2d.y).values,
 	}
 
 }
