@@ -30,20 +30,11 @@ func processSolution (solution complex128, args appArguments) geohash2d {
 
 
 
-func writeSolutions (solutionsChannel chan [ ] complex128, args appArguments) {
 
-	for solutions := range solutionsChannel {
-		for _, solution := range solutions {
+func writeManager (solutionsChan chan [] complex128, solveGroup sync.WaitGroup, args appArguments, processes int) {
 
-			processSolution(solution, args)
-
-		}
-	}
-
-	close(solutionsChannel)
 
 }
-
 
 
 
@@ -54,7 +45,7 @@ func foo (extreme int, order int, processes int) {
 		dimensions: Interval2d(0, 60000, 0, 6000),
 	}
 
-	var waitGroup sync.WaitGroup
+	var solveGroup sync.WaitGroup
 
 	bases := [ ] int { }
 
@@ -62,33 +53,48 @@ func foo (extreme int, order int, processes int) {
 		bases = append(bases, extreme)
 	}
 
-	solutions     := make(chan [ ] complex128)
+	solutionsChan := make(chan [ ] complex128, 100)
 	exploredBases := make([ ] int, order)
 
 	for ith := 0; ith < order; ith++ {
 		exploredBases[ith] = (2 * extreme) + 1
 	}
 
-	waitGroup.Add(processes)
+	/*
+	.
+	*/
 
 	for offset := 0; offset < processes; offset++ {
 
+		solveGroup.Add(1)
+
 		go func (offset int) {
 
-			defer waitGroup.Done( )
+
+			defer solveGroup.Done( )
 
 			coefficientCount := productOf(exploredBases)
 
 			for ith := offset; ith < coefficientCount; ith += processes {
-				solutions <- solvePolynomial( toCompanionMatrix(toMixedRadix(exploredBases, ith), float64(extreme)) )
+				solutionsChan <- solvePolynomial( toCompanionMatrix(toMixedRadix(exploredBases, ith), float64(extreme)) )
 			}
 
 		}(offset)
 
 	}
 
-	go writeSolutions(solutions, args)
+	go func ( ) {
 
-	waitGroup.Wait( )
+		for solutions := range solutionsChan {
+			for _, solution := range solutions {
+
+				_ = processSolution(solution, args)
+
+			}
+		}
+
+	}( )
+
+	solveGroup.Wait( )
 
 }

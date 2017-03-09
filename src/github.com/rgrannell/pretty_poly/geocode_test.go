@@ -246,6 +246,9 @@ func TestGeohashIdempotency (test *testing.T) {
 		var testInterval2d interval2d
 		var testPoint      point
 
+
+
+
 		for _, testCase := range getTestCases( ) {
 
 			testInterval2d = interval2d {

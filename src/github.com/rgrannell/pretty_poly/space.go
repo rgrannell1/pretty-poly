@@ -18,7 +18,7 @@ func toMixedRadix (bases [ ] int, num int) [ ] float64 {
 		}
 
 		acc[ith] = float64(num % bases[ith])
-		num = num / bases[ith]
+		num /= bases[ith]
 
 		ith--
 

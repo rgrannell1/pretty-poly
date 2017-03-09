@@ -21,10 +21,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 - [ ] automate go-package installs.
 - [x] implement function to generate coordinate space.
 - [x] implement function to solve companion matrix.
-- [ ] design root writes and reads.
 - [x] implement parallel solutions.
 - [x] benchmark parallel solutions.
 - [ ] implement geohashing.
-- [ ] implement -n,...,+n space-exploration instead of 0...n
+- [x] implement -n,...,+n space-exploration instead of 0...n
 - [ ] implement error-handling
 - [ ] add godoc
+- [ ] implement concurrent file-writes (seperate files)
+- [ ] implement external merge-sorting

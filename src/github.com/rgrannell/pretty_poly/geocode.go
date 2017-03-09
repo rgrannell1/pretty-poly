@@ -43,6 +43,20 @@ func Interval (lower float64, upper float64) interval {
 
 }
 
+func (interval0 *interval) AddXInterval (interval1 interval) interval2d {
+	return interval2d {
+		x: interval1,
+		y: *interval0,
+	}
+}
+
+func (interval0 *interval) AddYInterval (interval1 interval) interval2d {
+	return interval2d {
+		x: *interval0,
+		y: interval1,
+	}
+}
+
 func Interval2d (lowerx float64, upperx float64, lowery float64, uppery float64) interval2d {
 
 	return interval2d {
@@ -127,6 +141,13 @@ func Geohash2d (precision int8, interval interval2d, point2d point2d) geohash2d 
 		ys: Geohash(precision, interval.y, point2d.y).values,
 	}
 
+}
+
+func (hash0 *geohash) AddXAxis (hash1 geohash) geohash2d {
+	return geohash2d {
+		xs: hash1.values,
+		ys: hash0.values,
+	}
 }
 
 func (hash0 *geohash) AddYAxis (hash1 geohash) geohash2d {
