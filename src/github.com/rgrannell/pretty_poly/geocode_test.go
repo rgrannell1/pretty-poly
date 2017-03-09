@@ -230,48 +230,97 @@ func TestGeohashCreation (test *testing.T) {
 
 }
 
+func runIdempotency (gob *goblin.G, testCase geoHashTestCase) {
 
+	var geohash        geohash2d
+	var geohash2       geohash2d
+	var uintConversion uint64
+	var testInterval2d interval2d
+	var testPoint      point2d
 
-/*
+	testInterval2d = interval2d {
+		x: testCase.interval,
+		y: testCase.interval,
+	}
+
+	testPoint = point2d {
+		x: testCase.num,
+		y: testCase.num,
+	}
+
+	geohash        = Geohash2d(testCase.precision, testInterval2d, testPoint)
+	uintConversion = Geohash2dAsUint64(geohash)
+	geohash2       = uint64AsGeohash2d(testCase.precision, uintConversion)
+
+	gob.Assert(geohash).Equal(geohash2)
+
+}
 
 func TestGeohashIdempotency (test *testing.T) {
 
-	gob       := goblin.Goblin(test)
+	gob := goblin.Goblin(test)
+
+
+	testCase0 := geoHashTestCase {
+		precision: 1,
+		interval:  Interval(0, 1),
+		num:       0.5,
+		result:   geohash {
+			values: [ ] bool {
+				false,
+			},
+		},
+	}
+
+	testCase1 := geoHashTestCase {
+		precision: 1,
+		interval:  Interval(0, 1),
+		num:       0.55,
+		result:   geohash {
+			values: [ ] bool {
+				true,
+			},
+		},
+	}
+
+	testCase2 := geoHashTestCase {
+		precision: 5,
+		interval:  Interval(0, 1),
+		num:       1e-7,
+		result:   geohash {
+			values: [ ] bool {
+				false,
+				false,
+				false,
+				false,
+				false,
+			},
+		},
+	}
+
+	testCase3 := geoHashTestCase {
+		precision: 2,
+		interval:  Interval(0, 1),
+		num:       0.7,
+		result:   geohash {
+			values: [ ] bool {
+				true,
+				false,
+			},
+		},
+	}
 
 	gob.Describe("Geohash", func ( ) {
 
-		var geohash        geohash2d
-		var geohash2       geohash2d
-		var uintConversion uint64
-		var testInterval2d interval2d
-		var testPoint      point
+		gob.It("test that uint <-> geohash conversion is idempotent", func ( ) {
 
+			runIdempotency(gob, testCase0)
+			runIdempotency(gob, testCase1)
+			runIdempotency(gob, testCase2)
+			runIdempotency(gob, testCase3)
 
-
-
-		for _, testCase := range getTestCases( ) {
-
-			testInterval2d = interval2d {
-				x: testCase.interval,
-				y: testCase.interval,
-			}
-
-			testPoint = point2d {
-				x: testCase.num,
-				y: testCase.num,
-			}
-
-			geohash        = Geohash2d(testCase.precision, testInterval2d, testPoint)
-			uintConversion = Geohash2dAsUint64(geohash)
-			geohash2       = uint64AsGeohash2d(testCase.precision, uintConversion)
-
-			_ = geohash2
-
-		}
+		})
 
 	})
 
 }
-
-*/
-
