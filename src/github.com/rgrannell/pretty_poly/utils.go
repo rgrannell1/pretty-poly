@@ -24,17 +24,18 @@ func productOf (elems [ ]int) int {
 
 func toBits (hash uint64) [ ] bool {
 
-	digits := math.Ceil( math.Log2(float64(hash)) )
-
-
-	bits := make( [ ] bool, int(digits))
+	digits := int(math.Floor(math.Log2(float64(hash)) )) + 1
+	bits   := make( [ ] bool, digits)
 
 	for {
-		if hash <= 0 {
+		if hash <= uint64(0) {
 			break
 		}
 
-		bits = append(bits, hash % 2 == 1)
+		bits[digits-1] = hash % 2 == 1
+		digits--
+
+//		bits = append(bits, hash % 2 == 1)
 		hash /= 2
 
 	}
