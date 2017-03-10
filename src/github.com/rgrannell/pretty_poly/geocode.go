@@ -84,6 +84,37 @@ func (hash0 geohash) Equal(hash1 geohash) bool {
 
 }
 
+func (hash geohash) Decompress ( ) geohash2d {
+
+	xs := make([ ] bool, len(hash.values) / 2, len(hash.values) / 2)
+	ys := make([ ] bool, len(hash.values) / 2, len(hash.values) / 2)
+
+	xcount := 0
+	ycount := 0
+
+	for ith := 0; ith < len(hash.values); ith++ {
+
+		if ith % 2 == 0 {
+
+			xs[xcount] = hash.values[ith]
+			xcount++
+
+		} else {
+
+			ys[ycount] = hash.values[ith]
+			ycount++
+
+		}
+
+	}
+
+	return geohash2d {
+		xs: xs,
+		ys: ys,
+	}
+
+}
+
 func Geohash (precision int8, interval interval, num float64) geohash {
 
 	values := make([ ]bool, precision, precision)
@@ -134,6 +165,44 @@ func (hash0 geohash2d) Equal(hash1 geohash2d) bool {
 	return true
 
 }
+
+
+
+
+
+func (hash geohash2d) Compress ( ) geohash {
+
+	outputLength := len(hash.xs) + len(hash.ys)
+	output       := make([ ] bool, outputLength, outputLength)
+
+	xcount := 0
+	ycount := 0
+
+	for ith := 0; ith < outputLength; ith++ {
+
+		if ith % 2 == 0 {
+
+			output[ith] = hash.xs[xcount]
+			xcount++
+
+		} else {
+
+			output[ith] = hash.ys[ycount]
+			ycount++
+
+		}
+
+	}
+
+	return geohash {
+		values: output,
+	}
+
+}
+
+
+
+
 
 func Geohash2d (precision int8, interval interval2d, point2d point2d) geohash2d {
 
