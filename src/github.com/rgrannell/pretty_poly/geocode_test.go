@@ -5,6 +5,7 @@ package pretty_poly
 
 
 
+import "fmt"
 import "testing"
 import "github.com/franela/goblin"
 
@@ -74,7 +75,7 @@ func BenchmarkGeohash2dAsUint64 (bench *testing.B) {
 	bench.StartTimer( )
 
 	for ith := 0; ith < bench.N; ith++ {
-		_ = Geohash2dAsUint64(geohash)
+		_, _ = Geohash2dAsUint64(geohash)
 	}
 
 }
@@ -91,13 +92,13 @@ func BenchmarkUint64AsGeohash2d (bench *testing.B) {
 		y: 30000,
 	}
 
-	geohash := Geohash2d(8, interval, point)
-	hashInt := Geohash2dAsUint64(geohash)
+	geohash    := Geohash2d(8, interval, point)
+	hashInt, _ := Geohash2dAsUint64(geohash)
 
 	bench.StartTimer( )
 
 	for ith := 0; ith < bench.N; ith++ {
-		uint64AsGeohash2d(8, hashInt)
+		Uint64AsGeohash2d(8, hashInt)
 	}
 
 }
@@ -230,11 +231,73 @@ func TestGeohashCreation (test *testing.T) {
 
 }
 
+
+
+
+
+func TestGeohash2dToUint64 (test *testing.T) {
+
+	result0, _ := Geohash2dAsUint64(geohash2d {
+		xs: [ ] bool { true },
+		ys: [ ] bool { false },
+	})
+	result1, _ := Geohash2dAsUint64(geohash2d {
+		xs: [ ] bool { true },
+		ys: [ ] bool { true },
+	})
+	result2, _ := Geohash2dAsUint64(geohash2d {
+		xs: [ ] bool { true, false },
+		ys: [ ] bool { true, false },
+	})
+	result3, _ := Geohash2dAsUint64(geohash2d {
+		xs: [ ] bool { true, true },
+		ys: [ ] bool { true, true },
+	})
+	result4, _ := Geohash2dAsUint64(geohash2d {
+		xs: [ ] bool { true, true, false },
+		ys: [ ] bool { true, true, false },
+	})
+
+	if result0 != 1 {
+		panic(fmt.Sprintf("mismatched %d, %d", result0, 1))
+	}
+
+	if result1 != 2 {
+		panic(fmt.Sprintf("mismatched %d, %d", result1, 2))
+	}
+
+	if result2 != 12 {
+		panic(fmt.Sprintf("mismatched %d, %d", result2, 12))
+	}
+
+	if result3 != 15 {
+		panic(fmt.Sprintf("mismatched %d, %d", result3, 15))
+	}
+
+	if result4 != 60 {
+		panic(fmt.Sprintf("mismatched %d, %d", result4, 60))
+	}
+
+}
+
+
+
+
+
+func TestUint64AsGeohash2 (test *testing.T) {
+
+
+
+}
+
+
+
+
+
 func runIdempotency (gob *goblin.G, testCase geoHashTestCase) {
 
 	var geohash        geohash2d
 	var geohash2       geohash2d
-	var uintConversion uint64
 	var testInterval2d interval2d
 	var testPoint      point2d
 
@@ -248,9 +311,9 @@ func runIdempotency (gob *goblin.G, testCase geoHashTestCase) {
 		y: testCase.num,
 	}
 
-	geohash        = Geohash2d(testCase.precision, testInterval2d, testPoint)
-	uintConversion = Geohash2dAsUint64(geohash)
-	geohash2       = uint64AsGeohash2d(testCase.precision, uintConversion)
+	geohash            = Geohash2d(testCase.precision, testInterval2d, testPoint)
+	uintConversion, _ := Geohash2dAsUint64(geohash)
+	geohash2           = Uint64AsGeohash2d(testCase.precision, uintConversion)
 
 	gob.Assert(geohash).Equal(geohash2)
 
@@ -259,7 +322,6 @@ func runIdempotency (gob *goblin.G, testCase geoHashTestCase) {
 func TestGeohashIdempotency (test *testing.T) {
 
 	gob := goblin.Goblin(test)
-
 
 	testCase0 := geoHashTestCase {
 		precision: 1,

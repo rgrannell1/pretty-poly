@@ -1,7 +1,6 @@
 
 package pretty_poly
 
-import "fmt"
 import "math"
 
 
@@ -232,29 +231,43 @@ func (hash0 *geohash) AddYAxis (hash1 geohash) geohash2d {
 
 
 
-func Geohash2dAsUint64 (hash geohash2d) uint64 {
+func Geohash2dAsUint64 (hash geohash2d) (uint64, error) {
 
-	storable := uint64(0)
+	storable := uint64(1)
 
-	for ith := 0; ith < len(hash.xs); ith++ {
-		for jth := 0; jth < 2; jth++ {
+	if len(hash.xs) != len(hash.ys) {
 
-			var bisection bool
+		return 0, ErrMisbalancedGeohash
 
-			if jth == 0 {
-				bisection = hash.xs[ith]
-			} else {
-				bisection = hash.ys[ith]
+	} else if len(hash.xs) == 0 {
+
+		return 0, nil
+
+	} else {
+
+		digit := 0
+
+		for ith := 0; ith < len(hash.xs); ith++ {
+
+			if hash.xs[ith] {
+
+				storable += uint64(2^digit)
+				digit++
+
 			}
 
-			if bisection {
-				storable += uint64(2^ith)
+			if hash.ys[ith] {
+
+				storable += uint64(2^digit)
+				digit++
+
 			}
 
 		}
-	}
 
-	return storable
+		return storable, nil
+
+	}
 
 }
 
@@ -262,11 +275,9 @@ func Geohash2dAsUint64 (hash geohash2d) uint64 {
 
 
 
-func uint64AsGeohash2d (precision int8, hash uint64) geohash2d {
+func Uint64AsGeohash2d (precision int8, hash uint64) geohash2d {
 
 	digits := int8(math.Ceil( math.Log2(float64(hash)) ))
-
-	fmt.Println( digits )
 
 	xs := make([ ] bool, precision, precision)
 	ys := make([ ] bool, precision, precision)
