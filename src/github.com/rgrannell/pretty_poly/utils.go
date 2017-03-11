@@ -46,3 +46,28 @@ func toBits (hash uint64) [ ] bool {
 	return bits
 
 }
+
+func fromBitsLittleEndian (bits [ ] bool) uint64 {
+
+	output := uint64(0)
+
+	for ith := 0; ith < len(bits); ith++ {
+
+		if bits[ith] {
+			output += uint64( math.Exp2(float64(ith)) )
+		}
+
+	}
+
+	return output
+
+}
+
+func intersperse (bits0 [ ] bool , bits1 [ ] bool) [ ] bool {
+
+	output := make([ ] bool, len(bits0) + len(bits1), len(bits0) + len(bits1))
+
+
+	return output
+
+}

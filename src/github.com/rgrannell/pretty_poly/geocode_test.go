@@ -235,6 +235,7 @@ func TestGeohashCreation (test *testing.T) {
 
 
 
+
 func TestGeohash2dToUint64 (test *testing.T) {
 
 	result0, _ := Geohash2dAsUint64(geohash2d {
@@ -258,12 +259,12 @@ func TestGeohash2dToUint64 (test *testing.T) {
 		ys: [ ] bool { true, true, false },
 	})
 
-	if result0 != 1 {
-		panic(fmt.Sprintf("mismatched %d, %d", result0, 1))
+	if result0 != 2 {
+		panic(fmt.Sprintf("mismatched %d, %d", result0, 2))
 	}
 
-	if result1 != 2 {
-		panic(fmt.Sprintf("mismatched %d, %d", result1, 2))
+	if result1 != 3 {
+		panic(fmt.Sprintf("mismatched %d, %d", result1, 3))
 	}
 
 	if result2 != 12 {

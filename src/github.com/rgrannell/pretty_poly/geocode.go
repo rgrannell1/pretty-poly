@@ -233,7 +233,7 @@ func (hash0 *geohash) AddYAxis (hash1 geohash) geohash2d {
 
 func Geohash2dAsUint64 (hash geohash2d) (uint64, error) {
 
-	storable := uint64(1)
+	storable := uint64(0)
 
 	if len(hash.xs) != len(hash.ys) {
 
@@ -258,7 +258,7 @@ func Geohash2dAsUint64 (hash geohash2d) (uint64, error) {
 
 			if hash.ys[ith] {
 
-				storable += uint64(2^digit)
+				storable += uint64( math.Exp2(float64(digit)) )
 				digit++
 
 			}

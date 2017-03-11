@@ -5,6 +5,7 @@ package pretty_poly
 
 
 
+import "fmt"
 import "testing"
 import "github.com/franela/goblin"
 
@@ -35,5 +36,35 @@ func TestToBits (test *testing.T) {
 		runToBitsTest(gob, 7, [ ] bool {true, true, true} )
 
 	})
+
+}
+
+func TestFromBitsLittleEndian (test *testing.T) {
+
+	result0 := fromBitsLittleEndian([ ] bool { })
+	result1 := fromBitsLittleEndian([ ] bool {true})
+	result2 := fromBitsLittleEndian([ ] bool {false, true})
+	result3 := fromBitsLittleEndian([ ] bool {true, true})
+	result4 := fromBitsLittleEndian([ ] bool {false, false, true})
+
+	if result0 != 0 {
+		panic(fmt.Sprintf("mismatched %d, expected %d", result0, 0))
+	}
+
+	if result1 != 1 {
+		panic(fmt.Sprintf("mismatched %d, expected %d", result1, 1))
+	}
+
+	if result2 != 2 {
+		panic(fmt.Sprintf("mismatched %d, expected %d", result0, 2))
+	}
+
+	if result3 != 3 {
+		panic(fmt.Sprintf("mismatched %d, expected %d", result0, 3))
+	}
+
+	if result4 != 4 {
+		panic(fmt.Sprintf("mismatched %d, expected %d", result0, 4))
+	}
 
 }
