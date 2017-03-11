@@ -6,6 +6,7 @@ package pretty_poly
 
 
 import "fmt"
+import "reflect"
 import "testing"
 import "github.com/franela/goblin"
 
@@ -66,5 +67,29 @@ func TestFromBitsLittleEndian (test *testing.T) {
 	if result4 != 4 {
 		panic(fmt.Sprintf("mismatched %d, expected %d", result0, 4))
 	}
+
+}
+
+func TestIntersperseBool (test *testing.T) {
+
+	result0 := IntersperseBool([ ] bool { }, [ ] bool { })
+	result1 := IntersperseBool([ ] bool {true}, [ ] bool {false})
+	result2 := IntersperseBool([ ] bool {true, true}, [ ] bool {false, false})
+
+	if !reflect.DeepEqual(result0, [ ] bool { }) {
+		panic(fmt.Sprintf("mismatched case empty %d", result0))
+	}
+
+	if !reflect.DeepEqual(result1, [ ] bool {true, false}) {
+		panic(fmt.Sprintf("mismatched case l1 %d", result1))
+	}
+
+	if !reflect.DeepEqual(result2, [ ] bool {true, false, true, false}) {
+		panic(fmt.Sprintf("mismatched case l2 %d", result2))
+	}
+
+	_ = result0
+	_ = result1
+	_ = result2
 
 }

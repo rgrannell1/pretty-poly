@@ -251,7 +251,7 @@ func Geohash2dAsUint64 (hash geohash2d) (uint64, error) {
 
 			if hash.xs[ith] {
 
-				storable += uint64(2^digit)
+				storable += uint64( math.Exp2(float64(digit)) )
 				digit++
 
 			}

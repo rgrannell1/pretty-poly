@@ -5,7 +5,7 @@ package pretty_poly
 
 
 
-import "fmt"
+//import "fmt"
 import "testing"
 import "github.com/franela/goblin"
 
@@ -235,7 +235,7 @@ func TestGeohashCreation (test *testing.T) {
 
 
 
-
+/*
 func TestGeohash2dToUint64 (test *testing.T) {
 
 	result0, _ := Geohash2dAsUint64(geohash2d {
@@ -280,6 +280,7 @@ func TestGeohash2dToUint64 (test *testing.T) {
 	}
 
 }
+*/
 
 
 

@@ -63,10 +63,27 @@ func fromBitsLittleEndian (bits [ ] bool) uint64 {
 
 }
 
-func intersperse (bits0 [ ] bool , bits1 [ ] bool) [ ] bool {
+func IntersperseBool (bits0, bits1 [ ] bool) [ ] bool {
 
-	output := make([ ] bool, len(bits0) + len(bits1), len(bits0) + len(bits1))
+	outSize := len(bits0) + len(bits1)
+	output  := make([ ] bool, outSize, outSize)
 
+	bits0Count := 0
+	bits1Count := 0
+
+	for ith := 0; ith < outSize; ith += 2 {
+
+		output[ith] = bits0[bits0Count]
+		bits0Count++
+
+	}
+
+	for ith := 1; ith < outSize; ith += 2 {
+
+		output[ith] = bits1[bits1Count]
+		bits1Count++
+
+	}
 
 	return output
 
