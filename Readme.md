@@ -23,7 +23,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 - [x] implement function to solve companion matrix.
 - [x] implement parallel solutions.
 - [x] benchmark parallel solutions.
-- [ ] implement geohashing.
+- [x] implement geohashing.
 - [x] implement -n,...,+n space-exploration instead of 0...n
 - [ ] implement error-handling
 - [ ] add godoc
