@@ -50,6 +50,7 @@ func writeManager (solutionsChan chan [ ] complex128, writeChan chan uint64) {
 		binary.LittleEndian.PutUint64(encoded, solution)
 
 		conn.Write(encoded)
+    	conn.Sync()
 
 	}
 
@@ -138,6 +139,3 @@ func ReadIn ( ) {
 	fmt.Println( foo )
 
 }
-
-
-
