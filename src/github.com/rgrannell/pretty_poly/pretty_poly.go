@@ -1,8 +1,10 @@
 
 package pretty_poly
 
-//import "fmt"
+import "fmt"
 import "sync"
+import "encoding/binary"
+import "os"
 
 
 
@@ -16,14 +18,16 @@ type appArguments struct {
 
 
 
-func processSolution (solution complex128, args appArguments) geohash2d {
+func processSolution (solution complex128, args appArguments) (uint64, error) {
 
 	argandPoint := point2d {
 		x: real(solution),
 		y: imag(solution),
 	}
 
-	return Geohash2d(args.precision, args.dimensions, argandPoint)
+	return Geohash2dAsUint64(
+		Geohash2d(args.precision, args.dimensions, argandPoint),
+	)
 
 }
 
@@ -31,18 +35,33 @@ func processSolution (solution complex128, args appArguments) geohash2d {
 
 
 
-func writeManager (solutionsChan chan [] complex128, solveGroup sync.WaitGroup, args appArguments, processes int) {
+func writeManager (solutionsChan chan [ ] complex128, writeChan chan uint64) {
 
+	conn, err := os.Create("/tmp/test_0")
+	defer conn.Close( )
+
+	if err != nil {
+		panic(err)
+	}
+
+	for solution := range writeChan {
+
+		encoded := make([ ] byte, 8)
+		binary.LittleEndian.PutUint64(encoded, solution)
+
+		conn.Write(encoded)
+
+	}
 
 }
 
 
 
-func foo (extreme int, order int, processes int) {
+func RunMeRunMe (extreme int, order int, processes int) {
 
 	args := appArguments {
 		precision:  8,
-		dimensions: Interval2d(0, 60000, 0, 6000),
+		dimensions: Interval2d(-10, 10, -10, 10),
 	}
 
 	var solveGroup sync.WaitGroup
@@ -60,16 +79,11 @@ func foo (extreme int, order int, processes int) {
 		exploredBases[ith] = (2 * extreme) + 1
 	}
 
-	/*
-	.
-	*/
-
 	for offset := 0; offset < processes; offset++ {
 
 		solveGroup.Add(1)
 
 		go func (offset int) {
-
 
 			defer solveGroup.Done( )
 
@@ -83,12 +97,21 @@ func foo (extreme int, order int, processes int) {
 
 	}
 
+	writeChan := make(chan uint64, 100)
+
+	go writeManager(solutionsChan, writeChan)
 	go func ( ) {
 
 		for solutions := range solutionsChan {
 			for _, solution := range solutions {
 
-				_ = processSolution(solution, args)
+				encoded, err := processSolution(solution, args)
+
+				if err != nil {
+					panic("aarrgghh!")
+				}
+
+				writeChan <- encoded
 
 			}
 		}
@@ -98,3 +121,23 @@ func foo (extreme int, order int, processes int) {
 	solveGroup.Wait( )
 
 }
+
+func ReadIn ( ) {
+
+	conn, err := os.Create("/tmp/test_0")
+	defer conn.Close( )
+
+	if err != nil {
+		panic(err)
+	}
+
+	foo := make([ ] byte, 8 * 1000)
+
+	conn.Read(foo)
+
+	fmt.Println( foo )
+
+}
+
+
+

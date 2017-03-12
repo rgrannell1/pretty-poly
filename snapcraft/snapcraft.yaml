@@ -1,0 +1,17 @@
+name:        pretty_poly
+version:     v0.1.0
+summary:     todo
+description: todo
+confinement: strict
+
+apps:
+  trello-diff:
+    command: bin/trello-diff
+
+parts:
+  trello-diff:
+    plugin: nodejs
+    node-packages:
+      - rgrannell1/trello-diff
+    node-engine:
+4.5.0

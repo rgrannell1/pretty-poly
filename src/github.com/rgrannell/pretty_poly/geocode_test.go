@@ -234,68 +234,6 @@ func TestGeohashCreation (test *testing.T) {
 
 
 
-
-func TestGeohash2dToUint64 (test *testing.T) {
-/*
-
-	result0, _ := Geohash2dAsUint64(geohash2d {
-		xs: [ ] bool { true },
-		ys: [ ] bool { false },
-	})
-	result1, _ := Geohash2dAsUint64(geohash2d {
-		xs: [ ] bool { true },
-		ys: [ ] bool { true },
-	})
-	result2, _ := Geohash2dAsUint64(geohash2d {
-		xs: [ ] bool { true, false },
-		ys: [ ] bool { true, false },
-	})
-	result3, _ := Geohash2dAsUint64(geohash2d {
-		xs: [ ] bool { true, true },
-		ys: [ ] bool { true, true },
-	})
-	result4, _ := Geohash2dAsUint64(geohash2d {
-		xs: [ ] bool { true, true, false },
-		ys: [ ] bool { true, true, false },
-	})
-
-	if result0 != 2 {
-		panic(fmt.Sprintf("mismatched %d, expected %d", result0, 2))
-	}
-
-	if result1 != 3 {
-		panic(fmt.Sprintf("mismatched %d, expected %d", result1, 3))
-	}
-
-	if result2 != 12 {
-		panic(fmt.Sprintf("mismatched %d, expected %d", result2, 12))
-	}
-
-	if result3 != 15 {
-		panic(fmt.Sprintf("mismatched %d, expected %d", result3, 15))
-	}
-
-	if result4 != 60 {
-		panic(fmt.Sprintf("mismatched %d, expected %d", result4, 60))
-	}
-*/
-}
-
-
-
-
-
-
-func TestUint64AsGeohash2 (test *testing.T) {
-
-
-
-}
-
-
-
-
-
 func runIdempotency (gob *goblin.G, testCase geoHashTestCase) {
 
 	var geohash        geohash2d

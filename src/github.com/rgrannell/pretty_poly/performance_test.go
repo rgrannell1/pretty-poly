@@ -4,7 +4,7 @@ package pretty_poly
 
 
 
-
+import "github.com/rgrannell/pretty_poly"
 import "testing"
 
 

@@ -24,3 +24,11 @@ bench: setGoPath
 
 vet: setGoPath
 	go vet github.com/rgrannell/pretty_poly
+
+install: snap
+	cd snapcraft && snap install pretty_poly_* --force-dangerous && cd ..
+
+snap: FORCE
+	cd snapcraft && snapcraft clean && snapcraft snap && cd ..
+
+FORCE:
