@@ -4,6 +4,7 @@ package pretty_poly
 
 
 
+//import "fmt"
 import "math"
 
 
@@ -22,14 +23,18 @@ func productOf (elems [ ]int) int {
 
 }
 
-func toBits (hash uint64) [ ] bool {
+func toBits (hash uint64, length int) [ ] bool {
 
 	if hash == 0 {
-		return [ ] bool { }
+		return make([ ] bool, length, length)
 	}
 
 	digits := int(math.Floor(math.Log2(float64(hash)) )) + 1
-	bits   := make( [ ] bool, digits)
+	bits   := make( [ ] bool, length, length)
+
+	for ith := 0; ith < length; ith++ {
+		bits[ith] = false
+	}
 
 	for {
 		if hash <= uint64(0) {
@@ -86,5 +91,37 @@ func IntersperseBool (bits0, bits1 [ ] bool) [ ] bool {
 	}
 
 	return output
+
+}
+
+func DisperseBool (bits [ ] bool) ([ ] bool, [ ] bool, error) {
+
+	if len(bits) % 2 != 0 {
+		return nil, nil, ErrMisbalancedBits
+	}
+
+	xs := make([ ] bool, len(bits) / 2, len(bits) / 2)
+	ys := make([ ] bool, len(bits) / 2, len(bits) / 2)
+
+	xcount := 0
+	ycount := 0
+
+	for ith := 0; ith < len(bits); ith++ {
+
+		if ith % 2 == 0 {
+
+			xs[xcount] = bits[ith]
+			xcount++
+
+		} else {
+
+			ys[ycount] = bits[ith]
+			ycount++
+
+		}
+
+	}
+
+	return xs, ys, nil
 
 }

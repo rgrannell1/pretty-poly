@@ -14,10 +14,10 @@ import "github.com/franela/goblin"
 
 
 
-func runToBitsTest (gob *goblin.G, num uint64, expected [ ] bool ) {
+func runToBitsTest (gob *goblin.G, num uint64, length int, expected [ ] bool ) {
 
 	gob.It("converts to binary correctly", func ( ) {
-		gob.Assert(toBits(num)).Equal(expected)
+		gob.Assert(toBits(num, length)).Equal(expected)
 	})
 
 }
@@ -28,13 +28,13 @@ func TestToBits (test *testing.T) {
 
 	gob.Describe("toBits", func ( ) {
 
-		runToBitsTest(gob, 1, [ ] bool {true} )
-		runToBitsTest(gob, 2, [ ] bool {true, false} )
-		runToBitsTest(gob, 3, [ ] bool {true, true} )
-		runToBitsTest(gob, 4, [ ] bool {true, false, false} )
-		runToBitsTest(gob, 5, [ ] bool {true, false, true} )
-		runToBitsTest(gob, 6, [ ] bool {true, true, false} )
-		runToBitsTest(gob, 7, [ ] bool {true, true, true} )
+		runToBitsTest(gob, 1, 1, [ ] bool {true} )
+		runToBitsTest(gob, 2, 2, [ ] bool {true, false} )
+		runToBitsTest(gob, 3, 2, [ ] bool {true, true} )
+		runToBitsTest(gob, 4, 3, [ ] bool {true, false, false} )
+		runToBitsTest(gob, 5, 3, [ ] bool {true, false, true} )
+		runToBitsTest(gob, 6, 3, [ ] bool {true, true, false} )
+		runToBitsTest(gob, 7, 3, [ ] bool {true, true, true} )
 
 	})
 

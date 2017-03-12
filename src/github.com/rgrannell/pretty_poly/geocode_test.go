@@ -5,7 +5,6 @@ package pretty_poly
 
 
 
-//import "fmt"
 import "testing"
 import "github.com/franela/goblin"
 
@@ -235,8 +234,9 @@ func TestGeohashCreation (test *testing.T) {
 
 
 
-/*
+
 func TestGeohash2dToUint64 (test *testing.T) {
+/*
 
 	result0, _ := Geohash2dAsUint64(geohash2d {
 		xs: [ ] bool { true },
@@ -260,27 +260,27 @@ func TestGeohash2dToUint64 (test *testing.T) {
 	})
 
 	if result0 != 2 {
-		panic(fmt.Sprintf("mismatched %d, %d", result0, 2))
+		panic(fmt.Sprintf("mismatched %d, expected %d", result0, 2))
 	}
 
 	if result1 != 3 {
-		panic(fmt.Sprintf("mismatched %d, %d", result1, 3))
+		panic(fmt.Sprintf("mismatched %d, expected %d", result1, 3))
 	}
 
 	if result2 != 12 {
-		panic(fmt.Sprintf("mismatched %d, %d", result2, 12))
+		panic(fmt.Sprintf("mismatched %d, expected %d", result2, 12))
 	}
 
 	if result3 != 15 {
-		panic(fmt.Sprintf("mismatched %d, %d", result3, 15))
+		panic(fmt.Sprintf("mismatched %d, expected %d", result3, 15))
 	}
 
 	if result4 != 60 {
-		panic(fmt.Sprintf("mismatched %d, %d", result4, 60))
+		panic(fmt.Sprintf("mismatched %d, expected %d", result4, 60))
 	}
-
-}
 */
+}
+
 
 
 
@@ -299,7 +299,6 @@ func TestUint64AsGeohash2 (test *testing.T) {
 func runIdempotency (gob *goblin.G, testCase geoHashTestCase) {
 
 	var geohash        geohash2d
-	var geohash2       geohash2d
 	var testInterval2d interval2d
 	var testPoint      point2d
 
@@ -315,7 +314,11 @@ func runIdempotency (gob *goblin.G, testCase geoHashTestCase) {
 
 	geohash            = Geohash2d(testCase.precision, testInterval2d, testPoint)
 	uintConversion, _ := Geohash2dAsUint64(geohash)
-	geohash2           = Uint64AsGeohash2d(testCase.precision, uintConversion)
+	geohash2, geoErr  := Uint64AsGeohash2d(testCase.precision, uintConversion)
+
+	if geoErr != nil {
+		panic(geoErr)
+	}
 
 	gob.Assert(geohash).Equal(geohash2)
 
@@ -324,6 +327,8 @@ func runIdempotency (gob *goblin.G, testCase geoHashTestCase) {
 func TestGeohashIdempotency (test *testing.T) {
 
 	gob := goblin.Goblin(test)
+
+
 
 	testCase0 := geoHashTestCase {
 		precision: 1,

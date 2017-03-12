@@ -1,8 +1,6 @@
 
 package pretty_poly
 
-import "math"
-
 
 
 
@@ -233,77 +231,25 @@ func (hash0 *geohash) AddYAxis (hash1 geohash) geohash2d {
 
 func Geohash2dAsUint64 (hash geohash2d) (uint64, error) {
 
-	storable := uint64(0)
-
-	if len(hash.xs) != len(hash.ys) {
-
-		return 0, ErrMisbalancedGeohash
-
-	} else if len(hash.xs) == 0 {
-
-		return 0, nil
-
-	} else {
-
-		digit := 0
-
-		for ith := 0; ith < len(hash.xs); ith++ {
-
-			if hash.xs[ith] {
-
-				storable += uint64( math.Exp2(float64(digit)) )
-				digit++
-
-			}
-
-			if hash.ys[ith] {
-
-				storable += uint64( math.Exp2(float64(digit)) )
-				digit++
-
-			}
-
-		}
-
-		return storable, nil
-
-	}
+	return fromBitsLittleEndian(IntersperseBool(hash.xs, hash.ys)), nil
 
 }
 
+func Uint64AsGeohash2d (precision int8, hash uint64) (geohash2d, error) {
 
 
 
+	xs, ys, err := DisperseBool( toBits(hash, 2 * int(precision)) )
 
-func Uint64AsGeohash2d (precision int8, hash uint64) geohash2d {
+	if err != nil {
+		return geohash2d {xs: nil, ys: nil}, err
+	} else {
 
-	digits := int8(math.Ceil( math.Log2(float64(hash)) ))
+		return geohash2d {
+			xs: xs,
+			ys: ys,
+		}, nil
 
-	xs := make([ ] bool, precision, precision)
-	ys := make([ ] bool, precision, precision)
-
-	// append leading zeros.
-	if (digits < precision) {
-
-		for ith := int8(0); ith < (precision - int8(digits)); ith++ {
-
-			if ith % 2 == 0 {
-				xs[ith] = false
-			} else {
-				ys[ith] = false
-			}
-
-		}
-
-	}
-
-	for ith := (digits - 1); ith >= 0; ith++ {
-
-	}
-
-	return geohash2d {
-		xs: xs,
-		ys: ys,
 	}
 
 }

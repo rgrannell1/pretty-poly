@@ -17,5 +17,5 @@ func (err StaticError) Error( ) string {
 
 
 var (
-	ErrMisbalancedGeohash = StaticError { "foo!" }
+	ErrMisbalancedBits = StaticError { "will not divide an odd-number of bits into two slices." }
 )
