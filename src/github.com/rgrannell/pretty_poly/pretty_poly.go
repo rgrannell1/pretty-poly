@@ -1,10 +1,12 @@
 
 package pretty_poly
 
-import "fmt"
+//import "fmt"
 import "sync"
-import "encoding/binary"
+import "io"
 import "os"
+import "bufio"
+import "encoding/binary"
 
 
 
@@ -35,30 +37,36 @@ func processSolution (solution complex128, args appArguments) (uint64, error) {
 
 
 
-func writeManager (solutionsChan chan [ ] complex128, writeChan chan uint64) {
+func writeManager (filename string, solutionsChan chan [ ] complex128, writeChan chan uint64) {
 
-	conn, err := os.Create("/tmp/test_0")
+	conn, err := os.Create("./" + filename)
 	defer conn.Close( )
+
+	writer := bufio.NewWriter(conn)
+	defer writer.Flush( )
 
 	if err != nil {
 		panic(err)
 	}
 
+	count := 0
+
 	for solution := range writeChan {
 
-		encoded := make([ ] byte, 8)
-		binary.LittleEndian.PutUint64(encoded, solution)
-
-		conn.Write(encoded)
-    	conn.Sync()
+		writer.WriteString(string(solution) + "\n")
+		count++
 
 	}
+
+	println(count)
 
 }
 
 
 
-func RunMeRunMe (extreme int, order int, processes int) {
+func SolvePolynomials (extreme int, order int, filename string) {
+
+	processes := 20
 
 	args := appArguments {
 		precision:  8,
@@ -100,7 +108,7 @@ func RunMeRunMe (extreme int, order int, processes int) {
 
 	writeChan := make(chan uint64, 100)
 
-	go writeManager(solutionsChan, writeChan)
+	go writeManager(filename, solutionsChan, writeChan)
 	go func ( ) {
 
 		for solutions := range solutionsChan {
@@ -123,19 +131,39 @@ func RunMeRunMe (extreme int, order int, processes int) {
 
 }
 
-func ReadIn ( ) {
 
-	conn, err := os.Create("/tmp/test_0")
+
+
+func DrawImage (filename string) {
+
+	conn, err := os.Open("./" + filename)
 	defer conn.Close( )
 
 	if err != nil {
 		panic(err)
 	}
 
-	foo := make([ ] byte, 8 * 1000)
+	buffer := make([ ] byte, 4)
 
-	conn.Read(foo)
+	for {
 
-	fmt.Println( foo )
+		count, err := conn.Read(buffer)
+
+		if err != nil && err != io.EOF {
+			panic(err)
+		}
+
+		if count == 0 {
+			break
+		}
+
+		//binary.LittleEndian.Uint64(buffer)
+
+//		fmt.Println(
+//			buffer,
+//			binary.BigEndian.Uint64(buffer),
+//		)
+
+	}
 
 }

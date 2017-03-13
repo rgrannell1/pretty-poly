@@ -4,13 +4,10 @@ package pretty_poly
 
 
 
-type SolveArgs struct {
-	Extreme    int
-	Order      int
-	FileName   string
-}
 
-func Solve (arguments SolveArgs) {
+func Solve (order int, extreme int, fileName string) {
+
+	RunMeRunMe(extreme, order, fileName)
 
 }
 
@@ -18,10 +15,6 @@ func Solve (arguments SolveArgs) {
 
 
 
-type DrawArgs struct {
-
-}
-
-func Draw (arguments DrawArgs) {
-
+func Draw (fileName string) {
+	DrawImage(fileName)
 }
