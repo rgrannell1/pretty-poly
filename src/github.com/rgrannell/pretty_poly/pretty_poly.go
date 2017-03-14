@@ -1,7 +1,7 @@
 
 package pretty_poly
 
-//import "fmt"
+import "fmt"
 import "sync"
 import "io"
 import "os"
@@ -143,7 +143,7 @@ func DrawImage (filename string) {
 		panic(err)
 	}
 
-	buffer := make([ ] byte, 4)
+	buffer := make([ ] byte, 8)
 
 	for {
 
@@ -153,16 +153,13 @@ func DrawImage (filename string) {
 			panic(err)
 		}
 
-		if count == 0 {
+		if count != 8 {
 			break
 		}
 
-		//binary.LittleEndian.Uint64(buffer)
-
-//		fmt.Println(
-//			buffer,
-//			binary.BigEndian.Uint64(buffer),
-//		)
+		fmt.Println(
+			binary.LittleEndian.Uint64(buffer),
+		)
 
 	}
 
