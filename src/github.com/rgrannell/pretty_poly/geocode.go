@@ -4,6 +4,12 @@ package pretty_poly
 
 
 
+import "math"
+
+
+
+
+
 type geohash struct {
 	values [ ] bool
 }
@@ -117,12 +123,13 @@ func Geohash (precision int8, interval interval, num float64) geohash {
 	values := make([ ]bool, precision, precision)
 
 	var isUpperBucket bool
-	var pivot float64
+
+	pivot := interval.lower
 
 	for ith := 0; ith < int(precision); ith++ {
 
-		pivot         = interval.lower + ((interval.upper - interval.lower) / 2.0)
-		isUpperBucket = num > pivot
+		pivot += ((interval.upper - interval.lower) / 2.0)
+		isUpperBucket = num > float64(pivot)
 
 		values[ith] = isUpperBucket
 
@@ -203,6 +210,8 @@ func (hash geohash2d) Compress ( ) geohash {
 
 func Geohash2d (precision int8, interval interval2d, point2d point2d) geohash2d {
 
+	_ = Geohash(precision, interval.x, point2d.x).values
+
 	return geohash2d {
 		xs: Geohash(precision, interval.x, point2d.x).values,
 		ys: Geohash(precision, interval.y, point2d.y).values,
@@ -230,9 +239,7 @@ func (hash0 *geohash) AddYAxis (hash1 geohash) geohash2d {
 
 
 func Geohash2dAsUint64 (hash geohash2d) (uint64, error) {
-
 	return fromBitsLittleEndian(IntersperseBool(hash.xs, hash.ys)), nil
-
 }
 
 func Uint64AsGeohash2d (precision int8, hash uint64) (geohash2d, error) {
@@ -248,6 +255,36 @@ func Uint64AsGeohash2d (precision int8, hash uint64) (geohash2d, error) {
 			ys: ys,
 		}, nil
 
+	}
+
+}
+
+func (hash geohash) AsPoint (interval interval) float64 {
+
+	point := 0.0
+
+	for ith := 0; ith < len(hash.values); ith++ {
+
+		divisor := math.Pow(2, float64(ith + 1))
+
+		if hash.values[ith] == true {
+			point += (interval.upper - interval.lower) / float64(divisor)
+		}
+
+	}
+
+	return math.Floor(point)
+
+}
+
+func (hash geohash2d) AsPoint (interval interval2d) point2d {
+
+	x := (geohash {values: hash.xs }).AsPoint(interval.x)
+	y := (geohash {values: hash.ys }).AsPoint(interval.y)
+
+	return point2d {
+		x: x,
+		y: y,
 	}
 
 }

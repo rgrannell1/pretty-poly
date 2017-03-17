@@ -17,5 +17,6 @@ func (err StaticError) Error( ) string {
 
 
 var (
-	ErrMisbalancedBits = StaticError { "will not divide an odd-number of bits into two slices." }
+	ErrMisbalancedBits   = StaticError { "will not divide an odd-number of bits into two slices." }
+	ErrOrderArgumentSize = StaticError { "the 'order' argument was too small." }
 )

@@ -4,10 +4,25 @@ package pretty_poly
 
 
 
+func validateSolveArguments (order int, extreme int, filename string) error {
 
-func Solve (order int, extreme int, fileName string) {
+	if order <= 0 {
+		return ErrOrderArgumentSize
+	}
 
-	SolvePolynomials(extreme, order, fileName)
+	return nil
+
+}
+
+func Solve (order int, extreme int, filename string) {
+
+	err := validateSolveArguments(order, extreme, filename)
+
+	if (err != nil) {
+		panic(err)
+	}
+
+	SolvePolynomials(extreme, order, filename)
 
 }
 
@@ -15,6 +30,10 @@ func Solve (order int, extreme int, fileName string) {
 
 
 
-func Draw (fileName string) {
-	DrawImage(fileName)
+func validateDrawArguments (filename string) error {
+	return nil
+}
+
+func Draw (filename string) {
+	DrawImage(filename)
 }

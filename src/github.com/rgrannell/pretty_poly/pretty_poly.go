@@ -1,12 +1,16 @@
 
 package pretty_poly
 
-import "fmt"
 import "sync"
 import "io"
 import "os"
 import "bufio"
 import "encoding/binary"
+import "image"
+import "image/png"
+import "image/color"
+
+
 
 
 
@@ -53,12 +57,16 @@ func writeManager (filename string, solutionsChan chan [ ] complex128, writeChan
 
 	for solution := range writeChan {
 
-		writer.WriteString(string(solution) + "\n")
+		buffer := make([ ] byte, 8, 8)
+		binary.LittleEndian.PutUint64(buffer, solution)
+
+		for _, uintByte := range buffer {
+			writer.WriteByte(uintByte)
+		}
+
 		count++
 
 	}
-
-	println(count)
 
 }
 
@@ -145,6 +153,39 @@ func DrawImage (filename string) {
 
 	buffer := make([ ] byte, 8)
 
+	dimensions := interval2d {
+		x: interval {
+			lower: 0,
+			upper: 256,
+		},
+		y: interval {
+			lower: 0,
+			upper: 256,
+		},
+	}
+
+	img := PolynomialImage {
+		content: image.NewRGBA(image.Rect(
+			int(dimensions.x.lower),
+			int(dimensions.y.lower),
+			int(dimensions.x.upper),
+			int(dimensions.y.upper),
+		)),
+	}
+
+	for ith := dimensions.x.lower; ith < dimensions.x.upper; ith++ {
+		for jth := dimensions.y.lower; jth < dimensions.y.upper; jth++ {
+
+			img.content.Set(int(ith), int(jth), color.RGBA {
+				25,
+				25,
+				25,
+				255,
+			})
+
+		}
+	}
+
 	for {
 
 		count, err := conn.Read(buffer)
@@ -157,10 +198,30 @@ func DrawImage (filename string) {
 			break
 		}
 
-		fmt.Println(
-			binary.LittleEndian.Uint64(buffer),
-		)
+		solution, err := Uint64AsGeohash2d(8, binary.LittleEndian.Uint64(buffer))
+
+		if err != nil {
+			panic(err)
+		}
+
+		img.Set(solution, dimensions)
 
 	}
+
+	outConn, outErr := os.Create("draw.png")
+
+	if outErr != nil {
+		panic(outErr)
+	}
+
+	defer outConn.Close( )
+
+	pngErr := png.Encode(outConn, img)
+
+	if pngErr != nil {
+		panic(pngErr)
+	}
+
+	outConn.Sync( )
 
 }
