@@ -6,7 +6,10 @@ package pretty_poly
 
 
 import "testing"
+import "math"
+import "math/rand"
 import "github.com/franela/goblin"
+import "fmt"
 
 
 
@@ -19,6 +22,36 @@ type geoHashTestCase struct {
 }
 
 
+
+
+
+func geohashCreationTestCase ( ) (float64, [ ] bool, interval) {
+
+	precision := rand.Intn(8) + 1
+	extreme   := 10 * float64(rand.Intn(10) + 1)
+	interval  := Interval(0, +extreme)
+
+	num   := 0.0
+	bools := make([ ] bool, precision, precision)
+
+	for ith := 0; ith < precision; ith++ {
+
+		division := (interval.upper - interval.lower) / math.Pow(2, float64(ith + 2))
+
+		splitUpwards := rand.Intn(2) == 1
+		bools[ith] = splitUpwards
+
+		if splitUpwards {
+			num += division
+		} else {
+			num -= division
+		}
+
+	}
+
+	return num, bools, interval
+
+}
 
 
 
@@ -153,6 +186,41 @@ func runGeohash2dEqualityGeohashTest (gob *goblin.G, testCase geoHashTestCase) {
 
 
 
+func TestFoo (test *testing.T) {
+
+	for ith := 0; ith < 1000; ith++ {
+
+		num, expectedGeohash, interval := geohashCreationTestCase( )
+		precision     := int8(len(expectedGeohash))
+		actualGeohash := Geohash(precision, interval, num).values
+
+		if len(expectedGeohash) != len(actualGeohash) {
+
+			fmt.Println(expectedGeohash)
+			fmt.Println(actualGeohash)
+
+			panic("expected and actual geohash mismatched.")
+
+		}
+
+		for jth := 0; jth < len(expectedGeohash); jth++ {
+
+			if actualGeohash[jth] != expectedGeohash[jth] {
+
+				fmt.Println(num)
+				fmt.Println(interval)
+				fmt.Println(expectedGeohash)
+				fmt.Println(actualGeohash)
+
+				panic("expected and actual geohash mismatched.")
+
+			}
+
+		}
+
+	}
+
+}
 
 func TestGeohashCreation (test *testing.T) {
 
@@ -206,9 +274,6 @@ func TestGeohashCreation (test *testing.T) {
 			},
 		},
 	}
-
-
-
 
 	gob.Describe("Geohash", func ( ) {
 

@@ -142,13 +142,13 @@ func SolvePolynomials (extreme int, order int, filename string) {
 
 
 
-func DrawImage (filename string) {
+func DrawImage (filename string) error {
 
 	conn, err := os.Open("./" + filename)
 	defer conn.Close( )
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	buffer := make([ ] byte, 8)
@@ -191,7 +191,7 @@ func DrawImage (filename string) {
 		count, err := conn.Read(buffer)
 
 		if err != nil && err != io.EOF {
-			panic(err)
+			return err
 		}
 
 		if count != 8 {
@@ -201,7 +201,7 @@ func DrawImage (filename string) {
 		solution, err := Uint64AsGeohash2d(8, binary.LittleEndian.Uint64(buffer))
 
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		img.Set(solution, dimensions)
@@ -211,7 +211,7 @@ func DrawImage (filename string) {
 	outConn, outErr := os.Create("draw.png")
 
 	if outErr != nil {
-		panic(outErr)
+		return outErr
 	}
 
 	defer outConn.Close( )
@@ -219,9 +219,11 @@ func DrawImage (filename string) {
 	pngErr := png.Encode(outConn, img)
 
 	if pngErr != nil {
-		panic(pngErr)
+		return pngErr
 	}
 
 	outConn.Sync( )
+
+	return nil
 
 }

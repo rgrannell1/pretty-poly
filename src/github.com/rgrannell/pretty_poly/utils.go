@@ -125,3 +125,15 @@ func DisperseBool (bits [ ] bool) ([ ] bool, [ ] bool, error) {
 	return xs, ys, nil
 
 }
+
+func ReverseBool (bits [ ] bool) [ ] bool {
+
+	output := make( [ ] bool, len(bits), len(bits))
+
+	for ith := 0; ith < len(bits); ith++ {
+		output[len(output) - ith - 1] = bits[ith]
+	}
+
+	return output
+
+}

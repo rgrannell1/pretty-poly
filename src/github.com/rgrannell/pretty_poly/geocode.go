@@ -244,7 +244,8 @@ func Geohash2dAsUint64 (hash geohash2d) (uint64, error) {
 
 func Uint64AsGeohash2d (precision int8, hash uint64) (geohash2d, error) {
 
-	xs, ys, err := DisperseBool( toBits(hash, 2 * int(precision)) )
+	bits        := toBits(hash, 2 * int(precision))
+	xs, ys, err := DisperseBool(ReverseBool(bits))
 
 	if err != nil {
 		return geohash2d {xs: nil, ys: nil}, err

@@ -14,15 +14,20 @@ func validateSolveArguments (order int, extreme int, filename string) error {
 
 }
 
-func Solve (order int, extreme int, filename string) {
+func Solve (order int, extreme int, filename string) error {
 
 	err := validateSolveArguments(order, extreme, filename)
 
 	if (err != nil) {
-		panic(err)
-	}
 
-	SolvePolynomials(extreme, order, filename)
+		return err
+
+	} else {
+
+		SolvePolynomials(extreme, order, filename)
+		return nil
+
+	}
 
 }
 

@@ -3,7 +3,6 @@ package main
 
 
 
-
 import "strconv"
 
 import "github.com/docopt/docopt-go"
@@ -14,8 +13,8 @@ import "github.com/rgrannell/pretty_poly"
 
 const commandUsage = `
 Usage:
-	pretty_poly solve --name <str> [--extreme <extreme>] [--order <order>]
-	pretty_poly draw --name <str>
+	pretty_poly solve --name <str> [--extreme <extreme>] [--order <order>] [--precision <num>]
+	pretty_poly draw  --name <str>
 
 	pretty_poly -h | --help
 	pretty_poly --version
@@ -24,49 +23,89 @@ Description:
 	.
 
 Options:
-	--name <str>       asdasdasd.
-	--extreme <extreme>    The largest integer coefficient to use [default: 5].
-	--order <order>        The order of the polynomial to solve [default: 3].
-	-h, --help             Show this documentation.
-	--version              Show the package version.
+	--name      <str>        asdasd .
+	--extreme   <extreme>    The largest integer coefficient to use [default: 5].
+	--order     <order>      The order of the polynomial to solve [default: 3].
+	--precision <num>        adasd [default: 10].
+	-h, --help               Show this documentation.
+	--version                Show the package version.
 `
 
 
 
 
 
-func main ( ) {
+func solveCliCommand (args map[string] interface { }) error {
+
+	order, parseOrderErr := strconv.ParseInt(args["--order"].(string), 10, 64)
+
+	if parseOrderErr != nil {
+		return parseOrderErr
+	}
+
+	extreme, parseIntErr := strconv.ParseInt(args["--extreme"].(string), 10, 64)
+
+	if parseIntErr != nil {
+		return parseIntErr
+	}
+
+	runTimeErr := pretty_poly.Solve(
+		int(order),
+		int(extreme),
+		args["--name"].(string),
+	)
+
+	if runTimeErr != nil {
+		return runTimeErr
+	}
+
+	return nil
+
+}
+
+
+
+
+
+func drawCliCommand (args map[string] interface { }) error {
+
+	pretty_poly.Draw(args["--name"].(string))
+	return nil
+
+}
+
+
+
+
+func startCommandLine ( ) error {
 
 	args, err := docopt.Parse(commandUsage, nil, true, "Pretty Poly 0.1", false)
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	if args["solve"] == true {
 
-		order, parseOrderErr := strconv.ParseInt(args["--order"].(string), 10, 64)
-
-		if parseOrderErr != nil {
-			panic(".")
-		}
-
-		extreme, parseIntErr := strconv.ParseInt(args["--extreme"].(string), 10, 64)
-
-		if parseIntErr != nil {
-			panic(".")
-		}
-
-		pretty_poly.Solve(
-			int(order),
-			int(extreme),
-			args["--name"].(string),
-		)
+		return solveCliCommand(args)
 
 	} else if args["draw"] == true {
 
-		pretty_poly.Draw(args["--name"].(string))
+		return drawCliCommand(args)
 
+	}
+
+	return nil
+
+}
+
+
+func main ( ) {
+
+	err := startCommandLine( )
+
+	if err != nil {
+		panic(err)
 	}
 
 }
