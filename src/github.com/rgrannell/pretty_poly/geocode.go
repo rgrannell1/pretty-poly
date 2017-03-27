@@ -118,25 +118,34 @@ func (hash geohash) Decompress ( ) geohash2d {
 
 }
 
-func Geohash (precision int8, interval interval, num float64) geohash {
+func Geohash (precision int8, bounds interval, num float64) geohash {
 
 	values := make([ ]bool, precision, precision)
 
 	var isUpperBucket bool
 
-	pivot := interval.lower
+	tmpInterval := interval {
+		lower: bounds.lower,
+		upper: bounds.upper,
+	}
 
 	for ith := 0; ith < int(precision); ith++ {
 
-		pivot += ((interval.upper - interval.lower) / 2.0)
+		offset := (bounds.upper - bounds.lower) / math.Pow(2, float64(ith + 1))
+		pivot  := tmpInterval.lower + ((tmpInterval.upper - tmpInterval.lower) / 2.0)
+
 		isUpperBucket = num > float64(pivot)
 
 		values[ith] = isUpperBucket
 
+		if pivot < bounds.lower || pivot > bounds.upper {
+			panic("pivot out of bounds.")
+		}
+
 		if isUpperBucket {
-			interval.lower += pivot
+			tmpInterval.lower += offset
 		} else {
-			interval.upper -= pivot
+			tmpInterval.upper -= offset
 		}
 
 	}

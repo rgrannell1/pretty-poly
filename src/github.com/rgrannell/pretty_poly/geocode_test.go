@@ -31,7 +31,7 @@ func geohashCreationTestCase ( ) (float64, [ ] bool, interval) {
 	extreme   := 10 * float64(rand.Intn(10) + 1)
 	interval  := Interval(0, +extreme)
 
-	num   := 0.0
+	num   := (interval.upper - interval.lower) / 2
 	bools := make([ ] bool, precision, precision)
 
 	for ith := 0; ith < precision; ith++ {
@@ -39,6 +39,7 @@ func geohashCreationTestCase ( ) (float64, [ ] bool, interval) {
 		division := (interval.upper - interval.lower) / math.Pow(2, float64(ith + 2))
 
 		splitUpwards := rand.Intn(2) == 1
+
 		bools[ith] = splitUpwards
 
 		if splitUpwards {
@@ -186,41 +187,6 @@ func runGeohash2dEqualityGeohashTest (gob *goblin.G, testCase geoHashTestCase) {
 
 
 
-func TestFoo (test *testing.T) {
-
-	for ith := 0; ith < 1000; ith++ {
-
-		num, expectedGeohash, interval := geohashCreationTestCase( )
-		precision     := int8(len(expectedGeohash))
-		actualGeohash := Geohash(precision, interval, num).values
-
-		if len(expectedGeohash) != len(actualGeohash) {
-
-			fmt.Println(expectedGeohash)
-			fmt.Println(actualGeohash)
-
-			panic("expected and actual geohash mismatched.")
-
-		}
-
-		for jth := 0; jth < len(expectedGeohash); jth++ {
-
-			if actualGeohash[jth] != expectedGeohash[jth] {
-
-				fmt.Println(num)
-				fmt.Println(interval)
-				fmt.Println(expectedGeohash)
-				fmt.Println(actualGeohash)
-
-				panic("expected and actual geohash mismatched.")
-
-			}
-
-		}
-
-	}
-
-}
 
 func TestGeohashCreation (test *testing.T) {
 
@@ -274,6 +240,42 @@ func TestGeohashCreation (test *testing.T) {
 			},
 		},
 	}
+
+	gob.Describe("Random known geohash's match", func ( ) {
+
+		for ith := 0; ith < 1000; ith++ {
+
+			num, expectedGeohash, interval := geohashCreationTestCase( )
+			precision     := int8(len(expectedGeohash))
+			actualGeohash := Geohash(precision, interval, num).values
+
+			if len(expectedGeohash) != len(actualGeohash) {
+
+				fmt.Println(expectedGeohash)
+				fmt.Println(actualGeohash)
+
+				panic("expected and actual geohash mismatched.")
+
+			}
+
+			for jth := 0; jth < len(expectedGeohash); jth++ {
+
+				if actualGeohash[jth] != expectedGeohash[jth] {
+
+					fmt.Println(num)
+					fmt.Println(interval)
+					fmt.Println(expectedGeohash)
+					fmt.Println(actualGeohash)
+
+					panic("expected and actual geohash mismatched.")
+
+				}
+
+			}
+
+		}
+
+	})
 
 	gob.Describe("Geohash", func ( ) {
 

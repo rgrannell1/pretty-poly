@@ -1,8 +1,15 @@
 
+CURRENT_DIR = $(shell pwd)
+
+
+
 
 
 setGoPath:
-	export GOPATH="/home/ryan/Code/pretty_poly"
+	export GOPATH=$(CURRENT_DIR)
+
+fetchDependencies: setGoPath
+	go get github.com/gonum
 
 build: setGoPath
 
