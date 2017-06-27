@@ -5,4 +5,5 @@ services:
   - docker
 before_install:
   - docker build -t pretty_poly_tests .
+script:
   - docker run pretty_poly_tests
