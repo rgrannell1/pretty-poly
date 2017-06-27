@@ -39,3 +39,6 @@ snap: FORCE
 	cd snapcraft && snapcraft clean && snapcraft snap && cd ..
 
 FORCE:
+
+#go get github.com/gonum/matrix
+#go get github.com/gonum/floats

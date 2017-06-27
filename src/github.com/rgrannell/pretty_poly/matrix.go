@@ -30,7 +30,7 @@ func toCompanionMatrix (coeffs [ ] float64, offset float64) *mat64.Dense {
 func solvePolynomial (matrix *mat64.Dense) [ ] complex128 {
 
 	var eigen mat64.Eigen
-	eigen.Factorize(matrix, false)
+	eigen.Factorize(matrix, false, false)
 
 	return eigen.Values(nil)
 
