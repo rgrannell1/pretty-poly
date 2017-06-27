@@ -6,6 +6,13 @@
 
 ### Usage
 
+### Checklist (started June 27 2017)
+
+- [ ] command-line interface
+- [ ] dockerised testing
+- [ ] continuous testing
+- [ ] snap packaging
+
 ### Changelog
 
 ### License
