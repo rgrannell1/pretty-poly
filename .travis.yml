@@ -5,3 +5,6 @@ services:
 before_install:
   - docker build -t pretty_poly_tests .
   - docker run pretty_poly_tests
+
+script:
+  - bundle exec rake test
