@@ -16,18 +16,15 @@ build: setGoPath
 	go build github.com/rgrannell/pretty_poly
 	go install github.com/rgrannell/pretty_poly
 
-test: setGoPath
+test: FORCE
 
-	go build github.com/rgrannell/pretty_poly
-	go install github.com/rgrannell/pretty_poly
-	go test github.com/rgrannell/pretty_poly -v
+	docker build -t pretty_poly_tests -f dockerfiles/test-pretty-poly.txt .
+	docker run -t pretty_poly_tests
 
-bench: setGoPath
+bench: FORCE
 
-	go build github.com/rgrannell/pretty_poly
-	go install github.com/rgrannell/pretty_poly
-
-	go test github.com/rgrannell/pretty_poly -v -bench . -cover -benchmem -test.run Benchmark -count 2
+	docker build -t pretty_poly_benchmarks -f dockerfiles/bench-pretty-poly.txt .
+	docker run -t pretty_poly_benchmarks
 
 vet: setGoPath
 	go vet github.com/rgrannell/pretty_poly

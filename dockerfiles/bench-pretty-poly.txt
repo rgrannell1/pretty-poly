@@ -17,4 +17,7 @@ RUN go get github.com/gonum/floats
 RUN go get github.com/franela/goblin
 RUN go get github.com/docopt/docopt-go
 
-CMD [ "/usr/bin/make", "bench" ]
+RUN go build github.com/rgrannell/pretty_poly
+RUN go install github.com/rgrannell/pretty_poly
+
+CMD [ "go", "test", "github.com/rgrannell/pretty_poly", "-v", "-bench", ".", "-cover", "-benchmem", "-test.run", "Benchmark", "-count", "2" ]

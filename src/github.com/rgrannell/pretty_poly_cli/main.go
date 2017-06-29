@@ -13,8 +13,8 @@ import "github.com/rgrannell/pretty_poly"
 
 const commandUsage = `
 Usage:
-	pretty_poly solve --name <str> [--extreme <extreme>] [--order <order>] [--precision <num>]
-	pretty_poly draw  --name <str>
+	pretty_poly solve --name <name> [--extreme <extreme>] [--order <order>] [--precision <num>]
+	pretty_poly draw  --name <name>
 
 	pretty_poly -h | --help
 	pretty_poly --version
@@ -23,10 +23,10 @@ Description:
 	.
 
 Options:
-	--name      <str>        asdasd .
+	--name      <name>       asdasd .
 	--extreme   <extreme>    The largest integer coefficient to use [default: 5].
 	--order     <order>      The order of the polynomial to solve [default: 3].
-	--precision <num>        adasd [default: 10].
+	--precision <num>        the precision at which to plot [default: 10].
 	-h, --help               Show this documentation.
 	--version                Show the package version.
 `
@@ -37,13 +37,13 @@ Options:
 
 func solveCliCommand (args map[string] interface { }) error {
 
-	order, parseOrderErr := strconv.ParseInt(args["--order"].(string), 10, 64)
+	order, parseOrderErr := strconv.ParseInt(args["<order>"].(string), 10, 64)
 
 	if parseOrderErr != nil {
 		return parseOrderErr
 	}
 
-	extreme, parseIntErr := strconv.ParseInt(args["--extreme"].(string), 10, 64)
+	extreme, parseIntErr := strconv.ParseInt(args["<extreme>"].(string), 10, 64)
 
 	if parseIntErr != nil {
 		return parseIntErr
@@ -52,7 +52,7 @@ func solveCliCommand (args map[string] interface { }) error {
 	runTimeErr := pretty_poly.Solve(
 		int(order),
 		int(extreme),
-		args["--name"].(string),
+		args["<name>"].(string),
 	)
 
 	if runTimeErr != nil {
@@ -69,7 +69,7 @@ func solveCliCommand (args map[string] interface { }) error {
 
 func drawCliCommand (args map[string] interface { }) error {
 
-	pretty_poly.Draw(args["--name"].(string))
+	pretty_poly.Draw(args["<name>"].(string))
 	return nil
 
 }
