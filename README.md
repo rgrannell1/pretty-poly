@@ -8,9 +8,9 @@
 
 ### Checklist (started June 27 2017)
 
-- [ ] command-line interface
-- [ ] dockerised testing
-- [ ] continuous testing
+- [x] command-line interface
+- [x] dockerised testing
+- [x] continuous testing
 - [ ] snap packaging
 
 ### Changelog
