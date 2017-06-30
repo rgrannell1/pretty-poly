@@ -43,7 +43,7 @@ func processSolution (solution complex128, args appArguments) (uint64, error) {
 
 func writeManager (filename string, solutionsChan chan [ ] complex128, writeChan chan uint64) {
 
-	conn, err := os.Create("./" + filename)
+	conn, err := os.Create("/data/" + filename)
 	defer conn.Close( )
 
 	writer := bufio.NewWriter(conn)
@@ -208,7 +208,7 @@ func DrawImage (filename string) error {
 
 	}
 
-	outConn, outErr := os.Create("draw.png")
+	outConn, outErr := os.Create("ddata/ata/draw.png")
 
 	if outErr != nil {
 		return outErr

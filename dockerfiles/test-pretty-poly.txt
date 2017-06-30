@@ -21,4 +21,6 @@ RUN go get github.com/docopt/docopt-go
 RUN	go build github.com/rgrannell/pretty_poly
 RUN go install github.com/rgrannell/pretty_poly
 
-CMD ["go", "test", "github.com/rgrannell/pretty_poly", "-v"]
+RUN go vet github.com/rgrannell/pretty_poly
+
+CMD ["go", "test", "github.com/rgrannell/pretty_poly", "-v", "-cover"]

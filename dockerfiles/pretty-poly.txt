@@ -1,6 +1,9 @@
 FROM ubuntu
 MAINTAINER Ryan Grannell
 
+RUN mkdir /data
+VOLUME /data
+
 RUN apt-get update
 RUN apt-get install golang-go git --assume-yes
 RUN mkdir /usr/local/app
@@ -17,6 +20,8 @@ RUN go get github.com/gonum/floats
 RUN go get github.com/franela/goblin
 RUN go get github.com/docopt/docopt-go
 
-
 RUN go vet github.com/rgrannell/pretty_poly
-CMD [ "/usr/bin/go", "run", "src/github.com/rgrannell/pretty_poly_cli/main.go", "solve", "--name", "test" ]
+
+RUN /usr/bin/go run src/github.com/rgrannell/pretty_poly_cli/main.go solve --name test --extreme 10 --order 5 --precision 10
+
+RUN /usr/bin/go run src/github.com/rgrannell/pretty_poly_cli/main.go draw --name test#

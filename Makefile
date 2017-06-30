@@ -21,7 +21,7 @@ test: FORCE
 	docker build -t pretty_poly_tests -f dockerfiles/test-pretty-poly.txt .
 	docker run -t pretty_poly_tests
 
-bench: FORCE
+bench: force-dangerous
 
 	docker build -t pretty_poly_benchmarks -f dockerfiles/bench-pretty-poly.txt .
 	docker run -t pretty_poly_benchmarks
@@ -34,5 +34,14 @@ install: snap
 
 snap: FORCE
 	cd snapcraft && snapcraft clean && snapcraft snap && cd ..
+
+run: FORCE
+
+	docker build -t pretty_poly -f dockerfiles/pretty-poly.txt .
+	docker run -t pretty_poly
+
+run-debug: FORCE
+
+	docker run -i -t pretty_poly /bin/bash
 
 FORCE:
