@@ -20,5 +20,4 @@ RUN go get github.com/gonum/floats
 RUN go get github.com/franela/goblin
 RUN go get github.com/docopt/docopt-go
 
-RUN /usr/bin/go run src/github.com/rgrannell/pretty_poly_cli/main.go solve --name test --extreme 10 --order 5 --precision 10s
-RUN /usr/bin/go run src/github.com/rgrannell/pretty_poly_cli/main.go draw --name test
+RUN go vet github.com/rgrannell/pretty_poly

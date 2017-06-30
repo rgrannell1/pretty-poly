@@ -27,7 +27,9 @@ bench: force-dangerous
 	docker run -t pretty_poly_benchmarks
 
 vet: setGoPath
-	go vet github.com/rgrannell/pretty_poly
+
+	docker build -t pretty_poly_vet -f dockerfiles/vet-pretty-poly.txt .
+	docker run -t pretty_poly_vet
 
 install: snap
 	cd snapcraft && snap install pretty_poly_* --force-dangerous && cd ..
