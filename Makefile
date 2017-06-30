@@ -27,7 +27,7 @@ bench: force-dangerous
 
 vet: setGoPath
 
-	docker build -t pretty_poly_vet -f dockerfiles/vet-pretty-poly.txt .
+	docker build -t pretty
 	docker run -t pretty_poly_vet
 
 install: snap
@@ -38,7 +38,7 @@ snap: FORCE
 
 run: FORCE
 
-	mkdir /tmp/pretty_poly_run_mount
+	mkdir -p /tmp/pretty_poly_run_mount
 
 	docker build -t pretty_poly -f dockerfiles/pretty-poly.txt .
 	docker run --volume /tmp/pretty_poly_run_mount:/data -i -t pretty_poly
