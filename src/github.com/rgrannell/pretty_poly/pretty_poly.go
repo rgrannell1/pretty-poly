@@ -41,9 +41,9 @@ func processSolution (solution complex128, args appArguments) (uint64, error) {
 
 
 
-func writeManager (filename string, solutionsChan chan [ ] complex128, writeChan chan uint64) {
+func writeManager (filepath string, solutionsChan chan [ ] complex128, writeChan chan uint64) {
 
-	conn, err := os.Create("/data/" + filename)
+	conn, err := os.Create(filepath)
 	defer conn.Close( )
 
 	writer := bufio.NewWriter(conn)
@@ -72,7 +72,7 @@ func writeManager (filename string, solutionsChan chan [ ] complex128, writeChan
 
 
 
-func SolvePolynomials (extreme int, order int, filename string) {
+func SolvePolynomials (extreme int, order int, filepath string) {
 
 	processes := 20
 
@@ -116,7 +116,7 @@ func SolvePolynomials (extreme int, order int, filename string) {
 
 	writeChan := make(chan uint64, 100)
 
-	go writeManager(filename, solutionsChan, writeChan)
+	go writeManager(filepath, solutionsChan, writeChan)
 	go func ( ) {
 
 		for solutions := range solutionsChan {
@@ -142,9 +142,9 @@ func SolvePolynomials (extreme int, order int, filename string) {
 
 
 
-func DrawImage (filename string) error {
+func DrawImage (filepath string) error {
 
-	conn, err := os.Open("./" + filename)
+	conn, err := os.Open(filepath)
 	defer conn.Close( )
 
 	if err != nil {
@@ -208,7 +208,7 @@ func DrawImage (filename string) error {
 
 	}
 
-	outConn, outErr := os.Create("ddata/ata/draw.png")
+	outConn, outErr := os.Create(filepath + ".png")
 
 	if outErr != nil {
 		return outErr

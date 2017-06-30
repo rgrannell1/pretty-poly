@@ -13,8 +13,8 @@ import "github.com/rgrannell/pretty_poly"
 
 const commandUsage = `
 Usage:
-	pretty_poly solve --name <name> [--extreme <extreme>] [--order <order>] [--precision <num>]
-	pretty_poly draw  --name <name>
+	pretty_poly solve --path <path> [--extreme <extreme>] [--order <order>] [--precision <num>]
+	pretty_poly draw  --path <path>
 
 	pretty_poly -h | --help
 	pretty_poly --version
@@ -23,7 +23,7 @@ Description:
 	.
 
 Options:
-	--name      <name>       asdasd .
+	--path      <path>       asdasd .
 	--extreme   <extreme>    The largest integer coefficient to use [default: 5].
 	--order     <order>      The order of the polynomial to solve [default: 3].
 	--precision <num>        the precision at which to plot [default: 10].
@@ -52,7 +52,7 @@ func solveCliCommand (args map[string] interface { }) error {
 	runTimeErr := pretty_poly.Solve(
 		int(order),
 		int(extreme),
-		args["<name>"].(string),
+		args["<path>"].(string),
 	)
 
 	if runTimeErr != nil {
@@ -69,7 +69,7 @@ func solveCliCommand (args map[string] interface { }) error {
 
 func drawCliCommand (args map[string] interface { }) error {
 
-	pretty_poly.Draw(args["<name>"].(string))
+	pretty_poly.Draw(args["<path>"].(string))
 	return nil
 
 }

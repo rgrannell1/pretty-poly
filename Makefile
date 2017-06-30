@@ -4,7 +4,6 @@ CURRENT_DIR = $(shell pwd)
 
 
 
-
 setGoPath:
 	export GOPATH=$(CURRENT_DIR)
 
@@ -39,8 +38,14 @@ snap: FORCE
 
 run: FORCE
 
+	mkdir /tmp/pretty_poly_run_mount
+
 	docker build -t pretty_poly -f dockerfiles/pretty-poly.txt .
-	docker run -t pretty_poly
+	docker run --volume /tmp/pretty_poly_run_mount:/data -i -t pretty_poly
+
+display: run
+
+	display /tmp/pretty_poly_run_mount/test.png
 
 run-debug: FORCE
 

@@ -57,6 +57,9 @@ func TestToMixedRadix (test *testing.T) {
 					case 1:
 						gob.Assert(output[0]).Equal(float64(0))
 						gob.Assert(output[1]).Equal(float64(1))
+					case 2:
+						gob.Assert(output[0]).Equal(float64(0))
+						gob.Assert(output[1]).Equal(float64(2))
 					case 99:
 						gob.Assert(output[0]).Equal(float64(9))
 						gob.Assert(output[1]).Equal(float64(9))
