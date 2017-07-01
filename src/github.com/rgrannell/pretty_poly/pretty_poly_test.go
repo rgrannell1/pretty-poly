@@ -66,6 +66,23 @@ func TestPrettyPoly (test *testing.T) {
 
 		})
 
+		gob.It("creates an non-empty output file.", func ( ) {
+
+			info, err := os.Stat(tmpFileName + ".png");
+
+			if err != nil {
+				panic(err)
+			}
+
+			size := info.Size( )
+
+			if size == 0 {
+				panic(errors.New("empty file."))
+			}
+
+		})
+
+
 	})
 
 }
