@@ -26,12 +26,28 @@ func TestPrettyPoly (test *testing.T) {
 
 	gob.Describe("pretty_poly.SolvePolynomials", func ( ) {
 
-		gob.It("creates an output file.", func ( ) {
+		SolvePolynomials(5, 5, tmpFileName)
 
-			SolvePolynomials(5, 5, tmpFileName)
+		gob.It("creates an output file.", func ( ) {
 
 			if _, err := os.Stat(tmpFileName); os.IsNotExist(err) {
 				panic(errors.New("file " + tmpFileName + " does not exist."))
+			}
+
+		})
+
+		gob.It("creates an non-empty output file.", func ( ) {
+
+			info, err := os.Stat(tmpFileName);
+
+			if err != nil {
+				panic(err)
+			}
+
+			size := info.Size( )
+
+			if size == 0 {
+				panic(errors.New("empty file."))
 			}
 
 		})
@@ -44,7 +60,7 @@ func TestPrettyPoly (test *testing.T) {
 
 			DrawImage(tmpFileName)
 
-			if _, err := os.Stat(tmpFileName); os.IsNotExist(err) {
+			if _, err := os.Stat(tmpFileName ); os.IsNotExist(err) {
 				panic(errors.New("file " + tmpFileName + " does not exist."))
 			}
 
