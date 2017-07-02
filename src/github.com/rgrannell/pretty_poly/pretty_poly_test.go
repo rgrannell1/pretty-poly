@@ -9,6 +9,8 @@ import "io/ioutil"
 import "testing"
 import "errors"
 import "github.com/franela/goblin"
+import "image"
+import "math"
 
 
 
@@ -19,6 +21,7 @@ func TestPrettyPoly (test *testing.T) {
 	gob          := goblin.Goblin(test)
 	tmpFile, err := ioutil.TempFile("/tmp/", "pretty_poly")
 	tmpFileName  := tmpFile.Name( )
+	precision    := 8
 
 	if err != nil {
 		panic(err)
@@ -82,6 +85,35 @@ func TestPrettyPoly (test *testing.T) {
 
 		})
 
+		gob.It("creates a file with the correct dimension.", func ( ) {
+
+			file, err := os.Open(tmpFileName + ".png");
+
+			defer file.Close( )
+
+			if err != nil {
+				panic(err)
+			}
+
+			image, _, err := image.DecodeConfig(file)
+
+			if err != nil {
+				panic(err)
+			}
+
+			println( image.Width )
+
+			expectedDimension := math.Pow(float64(2), float64(precision))
+
+			if float64(image.Width) != expectedDimension {
+				panic(errors.New("invalid image width " + string(image.Width)))
+			}
+
+			if float64(image.Height) != expectedDimension {
+				panic(errors.New("invalid image height " + string(image.Height)))
+			}
+
+		})
 
 	})
 
