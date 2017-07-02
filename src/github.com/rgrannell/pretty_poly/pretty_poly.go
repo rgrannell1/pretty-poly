@@ -73,12 +73,12 @@ func writeManager (filepath string, solutionsChan chan [ ] complex128, writeChan
 
 
 
-func SolvePolynomials (extreme int, order int, filepath string) {
+func SolvePolynomials (extreme int, order int, filepath string, precision int8) {
 
 	processes := 20
 
 	args := appArguments {
-		precision:  8,
+		precision:  precision,
 		dimensions: Interval2d(-10, 10, -10, 10),
 	}
 
@@ -143,14 +143,8 @@ func SolvePolynomials (extreme int, order int, filepath string) {
 
 
 
-func DrawImage (filepath string, precision float64) error {
+func DrawImage (solutionPath string, precision float64) error {
 
-	conn, err := os.Open(filepath)
-	defer conn.Close( )
-
-	if err != nil {
-		return err
-	}
 
 	buffer := make([ ] byte, 8)
 
@@ -187,9 +181,16 @@ func DrawImage (filepath string, precision float64) error {
 		}
 	}
 
+	solutionConn, err := os.Open(solutionPath)
+	defer solutionConn.Close( )
+
+	if err != nil {
+		return err
+	}
+
 	for {
 
-		count, err := conn.Read(buffer)
+		count, err := solutionConn.Read(buffer)
 
 		if err != nil && err != io.EOF {
 			return err
@@ -209,7 +210,7 @@ func DrawImage (filepath string, precision float64) error {
 
 	}
 
-	outConn, outErr := os.Create(filepath + ".png")
+	outConn, outErr := os.Create(solutionPath + ".png")
 
 	if outErr != nil {
 		return outErr

@@ -24,7 +24,7 @@ func Solve (order int, extreme int, filename string) error {
 
 	} else {
 
-		SolvePolynomials(extreme, order, filename)
+		SolvePolynomials(extreme, order, filename, 8)
 		return nil
 
 	}

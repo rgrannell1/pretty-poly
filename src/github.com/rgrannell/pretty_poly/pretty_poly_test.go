@@ -16,12 +16,12 @@ import "math"
 
 
 
-func TestPrettyPoly (test *testing.T) {
+func runPrecisionTests (test *testing.T, precision float64) {
+
 
 	gob          := goblin.Goblin(test)
 	tmpFile, err := ioutil.TempFile("/tmp/", "pretty_poly")
 	tmpFileName  := tmpFile.Name( )
-	precision    := 8.0
 
 	if err != nil {
 		panic(err)
@@ -29,7 +29,7 @@ func TestPrettyPoly (test *testing.T) {
 
 	gob.Describe("pretty_poly.SolvePolynomials", func ( ) {
 
-		SolvePolynomials(5, 5, tmpFileName)
+		SolvePolynomials(5, 5, tmpFileName, int8(precision))
 
 		gob.It("creates an output file.", func ( ) {
 
@@ -114,5 +114,25 @@ func TestPrettyPoly (test *testing.T) {
 		})
 
 	})
+
+
+
+
+
+}
+
+
+
+
+func TestPrettyPoly (test *testing.T) {
+
+	runPrecisionTests(test, 1.0)
+	runPrecisionTests(test, 2.0)
+	runPrecisionTests(test, 3.0)
+	runPrecisionTests(test, 4.0)
+	runPrecisionTests(test, 5.0)
+	runPrecisionTests(test, 6.0)
+	runPrecisionTests(test, 7.0)
+	runPrecisionTests(test, 8.0)
 
 }
