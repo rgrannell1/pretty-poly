@@ -40,5 +40,5 @@ func validateDrawArguments (filename string) error {
 }
 
 func Draw (filename string) {
-	DrawImage(filename)
+	DrawImage(filename, 8)
 }

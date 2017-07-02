@@ -21,7 +21,7 @@ func TestPrettyPoly (test *testing.T) {
 	gob          := goblin.Goblin(test)
 	tmpFile, err := ioutil.TempFile("/tmp/", "pretty_poly")
 	tmpFileName  := tmpFile.Name( )
-	precision    := 8
+	precision    := 8.0
 
 	if err != nil {
 		panic(err)
@@ -61,7 +61,7 @@ func TestPrettyPoly (test *testing.T) {
 
 		gob.It("creates an output image.", func ( ) {
 
-			DrawImage(tmpFileName)
+			DrawImage(tmpFileName, precision)
 
 			if _, err := os.Stat(tmpFileName ); os.IsNotExist(err) {
 				panic(errors.New("file " + tmpFileName + " does not exist."))
@@ -100,8 +100,6 @@ func TestPrettyPoly (test *testing.T) {
 			if err != nil {
 				panic(err)
 			}
-
-			println( image.Width )
 
 			expectedDimension := math.Pow(float64(2), float64(precision))
 

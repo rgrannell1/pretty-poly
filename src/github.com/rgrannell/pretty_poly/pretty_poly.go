@@ -2,6 +2,7 @@
 package pretty_poly
 
 import "sync"
+import "math"
 import "io"
 import "os"
 import "bufio"
@@ -142,7 +143,7 @@ func SolvePolynomials (extreme int, order int, filepath string) {
 
 
 
-func DrawImage (filepath string) error {
+func DrawImage (filepath string, precision float64) error {
 
 	conn, err := os.Open(filepath)
 	defer conn.Close( )
@@ -156,11 +157,11 @@ func DrawImage (filepath string) error {
 	dimensions := interval2d {
 		x: interval {
 			lower: 0,
-			upper: 256,
+			upper: math.Pow(2, precision),
 		},
 		y: interval {
 			lower: 0,
-			upper: 256,
+			upper: math.Pow(2, precision),
 		},
 	}
 
