@@ -53,13 +53,27 @@ func TestToBits (test *testing.T) {
 
 	gob.Describe("toBits", func ( ) {
 
-		runToBitsTest(gob, 1, 1, [ ] bool {true} )
-		runToBitsTest(gob, 2, 2, [ ] bool {true, false} )
-		runToBitsTest(gob, 3, 2, [ ] bool {true, true} )
-		runToBitsTest(gob, 4, 3, [ ] bool {true, false, false} )
-		runToBitsTest(gob, 5, 3, [ ] bool {true, false, true} )
-		runToBitsTest(gob, 6, 3, [ ] bool {true, true, false} )
-		runToBitsTest(gob, 7, 3, [ ] bool {true, true, true} )
+		gob.It("works for known test cases", func ( ) {
+
+			runToBitsTest(gob, 1, 1, [ ] bool {true} )
+			runToBitsTest(gob, 2, 2, [ ] bool {true, false} )
+			runToBitsTest(gob, 3, 2, [ ] bool {true, true} )
+			runToBitsTest(gob, 4, 3, [ ] bool {true, false, false} )
+			runToBitsTest(gob, 5, 3, [ ] bool {true, false, true} )
+			runToBitsTest(gob, 6, 3, [ ] bool {true, true, false} )
+			runToBitsTest(gob, 7, 3, [ ] bool {true, true, true} )
+
+		})
+
+		gob.It("does not panic for random input", func ( ) {
+
+			for num := 0; num < 20; num++ {
+				for len := 0; len < 20; len++ {
+					toBits(uint64(num), len)
+				}
+			}
+
+		})
 
 	})
 

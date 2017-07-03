@@ -126,7 +126,7 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 
 func TestPrettyPoly (test *testing.T) {
 
-	for precision := 1; precision < 10; precision++ {
+	for precision := 8; precision < 10; precision++ {
 		runPrecisionTests(test, float64(precision), 5, 5)
 	}
 

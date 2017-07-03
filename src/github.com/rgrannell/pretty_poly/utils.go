@@ -41,7 +41,7 @@ func toBits (hash uint64, length int) [ ] bool {
 			break
 		}
 
-		bits[digits-1] = hash % 2 == 1
+		bits[digits - 1] = hash % 2 == 1
 		digits--
 
 		hash /= 2
