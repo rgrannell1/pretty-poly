@@ -4,20 +4,19 @@ MAINTAINER Ryan Grannell
 RUN mkdir /data
 VOLUME /data
 
+ADD src /usr/local/app/src
+ADD Makefile /usr/local/app/Makefile
+
+RUN mkdir /usr/local/app
+RUN mkdir /usr/local/app/src
+WORKDIR /usr/local/app
+
+ENV GOPATH /usr/local/app
+
 RUN apt-get update
 RUN apt-get install golang-go git --assume-yes
 RUN go get golang.org/x/build/version/go1.9beta1
 RUN go1.9beta1 download
-
-RUN mkdir /usr/local/app
-RUN mkdir /usr/local/app/src
-
-ADD src /usr/local/app/src
-ADD Makefile /usr/local/app/Makefile
-
-WORKDIR /usr/local/app
-
-ENV GOPATH /usr/local/app
 RUN go1.9beta1 get github.com/gonum/matrix
 RUN go1.9beta1 get github.com/gonum/floats
 RUN go1.9beta1 get github.com/franela/goblin
