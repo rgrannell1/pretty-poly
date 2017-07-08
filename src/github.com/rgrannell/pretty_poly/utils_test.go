@@ -55,6 +55,7 @@ func TestToBits (test *testing.T) {
 
 		gob.It("works for known test cases", func ( ) {
 
+			runToBitsTest(gob, 0, 2, [ ] bool {false, false} )
 			runToBitsTest(gob, 1, 1, [ ] bool {true} )
 			runToBitsTest(gob, 2, 2, [ ] bool {true, false} )
 			runToBitsTest(gob, 3, 2, [ ] bool {true, true} )

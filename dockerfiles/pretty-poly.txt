@@ -7,8 +7,7 @@ VOLUME /data
 ADD src /usr/local/app/src
 ADD Makefile /usr/local/app/Makefile
 
-RUN mkdir /usr/local/app
-RUN mkdir /usr/local/app/src
+RUN mkdir -p /usr/local/app/src
 WORKDIR /usr/local/app
 
 ENV GOPATH /usr/local/app
@@ -16,10 +15,10 @@ ENV GOPATH /usr/local/app
 RUN apt-get update
 RUN apt-get install golang-go git --assume-yes
 RUN go get golang.org/x/build/version/go1.9beta1
-RUN go1.9beta1 download
-RUN go1.9beta1 get github.com/gonum/matrix
-RUN go1.9beta1 get github.com/gonum/floats
-RUN go1.9beta1 get github.com/franela/goblin
-RUN go1.9beta1 get github.com/docopt/docopt-go
+RUN /usr/local/app/bin/go1.9beta1 download
+RUN /usr/local/app/bin/go1.9beta1 get github.com/gonum/matrix
+RUN /usr/local/app/bin/go1.9beta1 get github.com/gonum/floats
+RUN /usr/local/app/bin/go1.9beta1 get github.com/franela/goblin
+RUN /usr/local/app/bin/go1.9beta1 get github.com/docopt/docopt-go
 
-CMD go1.9beta1 run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path /data/test --extreme 5 --order 5 --precision 10 && go1.9beta1 run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path /data/test
+CMD /usr/local/app/bin/go1.9beta1 run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path /data/test --extreme 5 --order 5 --precision 10 && /usr/local/app/bin/go1.9beta1 run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path /data/test

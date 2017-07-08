@@ -2,7 +2,13 @@ FROM ubuntu
 MAINTAINER Ryan Grannell
 
 RUN apt-get update
-RUN apt-get install golang-go git --assume-yes
+
+RUN apt-get update && apt-get install python-software-properties --assume-yes
+RUN add-apt-repository ppa:gophers/archive --yes
+RUN apt-get update && apt-get install golang-1.8 --assume-yes
+
+RUN ln /usr/lib/go-1.8/bin/go /usr/bin/go1.8
+
 RUN mkdir /usr/local/app
 RUN mkdir /usr/local/app/src
 

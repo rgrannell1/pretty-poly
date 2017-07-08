@@ -4,7 +4,8 @@ package pretty_poly
 
 
 
-//import "fmt"
+
+
 import "math"
 
 
@@ -37,6 +38,7 @@ func toBits (hash uint64, length int) [ ] bool {
 	}
 
 	for {
+
 		if hash <= uint64(0) {
 			break
 		}

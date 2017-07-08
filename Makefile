@@ -18,9 +18,9 @@ build: setGoPath
 test: FORCE
 
 	docker build -t pretty_poly_tests -f dockerfiles/test-pretty-poly.txt .
-	docker run -t pretty_poly_tests
+	docker run -i -t pretty_poly_tests
 
-bench: force-dangerous
+bench: FORCE
 
 	docker build -t pretty_poly_benchmarks -f dockerfiles/bench-pretty-poly.txt .
 	docker run -t pretty_poly_benchmarks

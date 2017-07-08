@@ -115,10 +115,6 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 
 	})
 
-
-
-
-
 }
 
 
@@ -128,6 +124,29 @@ func TestPrettyPoly (test *testing.T) {
 
 	for precision := 8; precision < 10; precision++ {
 		runPrecisionTests(test, float64(precision), 5, 5)
+	}
+
+}
+
+
+
+
+
+func BenchPrettyPoly (bench *testing.B) {
+
+	tmpFile, err := ioutil.TempFile("/tmp/", "pretty_poly")
+
+	if err != nil {
+		panic(err)
+	}
+
+	tmpFileName  := tmpFile.Name( )
+
+	for precision := 0; precision < 8; precision++ {
+
+		bench.Run("asdasd", func (bench *testing.B) {
+			SolvePolynomials(3, 5, tmpFileName, int8(precision))
+		})
 	}
 
 }
