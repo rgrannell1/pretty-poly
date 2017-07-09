@@ -6,6 +6,7 @@ package pretty_poly
 
 
 
+//import "fmt"
 import "math"
 
 
@@ -26,14 +27,16 @@ func productOf (elems [ ]int) int {
 
 func toBits (hash uint64, length int) [ ] bool {
 
+	digits      := int(math.Floor(math.Log2(float64(hash)) )) + 1
+	sliceLength := int(math.Max(float64(length), float64(digits)) )
+
 	if hash == 0 {
-		return make([ ] bool, length, length)
+		return make([ ] bool, sliceLength, sliceLength)
 	}
 
-	digits := int(math.Floor(math.Log2(float64(hash)) )) + 1
-	bits   := make( [ ] bool, length, length)
+	bits := make([ ] bool, sliceLength, sliceLength)
 
-	for ith := 0; ith < length; ith++ {
+	for ith := 0; ith < sliceLength; ith++ {
 		bits[ith] = false
 	}
 

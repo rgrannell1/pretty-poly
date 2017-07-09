@@ -21,4 +21,4 @@ RUN /usr/local/app/bin/go1.9beta1 get github.com/gonum/floats
 RUN /usr/local/app/bin/go1.9beta1 get github.com/franela/goblin
 RUN /usr/local/app/bin/go1.9beta1 get github.com/docopt/docopt-go
 
-CMD /usr/local/app/bin/go1.9beta1 run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path /data/test --extreme 5 --order 5 --precision 10 && /usr/local/app/bin/go1.9beta1 run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path /data/test
+CMD /usr/local/app/bin/go1.9beta1 run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path /data/test --extreme 5 --order 5 --precision 10 && /usr/local/app/bin/go1.9beta11 run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path /data/test
