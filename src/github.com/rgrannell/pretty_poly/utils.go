@@ -39,7 +39,7 @@ func toBits (hash uint64, length int) [ ] bool {
 		}
 	}
 
-	if len(bits) < length {
+	if len(bits) > length {
 		return bits[:length]
 	} else {
 		return bits

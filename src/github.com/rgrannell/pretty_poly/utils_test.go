@@ -6,7 +6,7 @@ package pretty_poly
 
 
 import "fmt"
-// import "reflect"
+import "reflect"
 import "testing"
 import "github.com/franela/goblin"
 
@@ -107,7 +107,7 @@ func TestFromBitsLittleEndian (test *testing.T) {
 
 }
 
-/*
+
 func TestIntersperseBool (test *testing.T) {
 
 	result0 := IntersperseBool([ ] bool { }, [ ] bool { })
@@ -132,5 +132,6 @@ func TestIntersperseBool (test *testing.T) {
 
 }
 
-*/
+
+
 
