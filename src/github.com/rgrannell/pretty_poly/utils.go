@@ -42,65 +42,6 @@ func toBits (hash uint64) [ ] bool {
 
 	return bits
 
-	/*
-
-	if hash == 0 {
-		return bits
-	} else {
-
-		for ith := 0; ith < len(bits); ith++ {
-
-			value := (hash >> uint64(ith)) & 1
-
-			if value == 0 {
-				bits[ith] = false
-			} else {
-				bits[ith] = true
-			}
-
-		}
-
-		return bits
-	}
-	*/
-
-
-
-
-//
-
-//	return bits[0:outputLength]
-
-	/*
-
-	digits      := int(math.Floor(math.Log2(float64(hash)) )) + 1
-	sliceLength := int(math.Max(float64(length), float64(digits)) )
-
-
-	bits := make([ ] bool, sliceLength, sliceLength)
-
-	for ith := 0; ith < sliceLength; ith++ {
-		bits[ith] = false
-	}
-
-	for {
-
-		if hash <= uint64(0) {
-			break
-		}
-
-		bits[digits - 1] = hash % 2 == 1
-		digits--
-
-		hash /= 2
-
-	}
-
-	return bits
-
-	*/
-
-
 }
 
 func fromBitsLittleEndian (bits [ ] bool) uint64 {
