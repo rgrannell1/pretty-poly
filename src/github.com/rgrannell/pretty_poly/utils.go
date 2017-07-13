@@ -6,6 +6,7 @@ package pretty_poly
 
 
 
+import "fmt"
 import "math"
 
 
@@ -26,7 +27,22 @@ func productOf (elems [ ]int) int {
 
 func toBits (hash uint64) [ ] bool {
 
-	bits := make([ ] bool, 64)
+	bitString := fmt.Sprintf("%b", hash)
+	bits      := make([ ] bool, len(bitString))
+
+	for ith, char := range bitString {
+
+		if char == '0' {
+			bits[ith] = false
+		} else {
+			bits[ith] = true
+		}
+
+	}
+
+	return bits
+
+	/*
 
 	if hash == 0 {
 		return bits
@@ -46,6 +62,8 @@ func toBits (hash uint64) [ ] bool {
 
 		return bits
 	}
+	*/
+
 
 
 
