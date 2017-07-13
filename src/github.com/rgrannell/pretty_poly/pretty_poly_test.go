@@ -67,8 +67,8 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 
 			DrawImage(tmpFileName, precision)
 
-			if _, err := os.Stat(tmpFileName ); os.IsNotExist(err) {
-				panic(errors.New("file " + tmpFileName + " does not exist."))
+			if _, err := os.Stat(tmpFileName + ".png"); os.IsNotExist(err) {
+				panic(errors.New("file " + tmpFileName + ".png does not exist."))
 			}
 
 		})

@@ -145,7 +145,6 @@ func SolvePolynomials (extreme int, order int, filepath string, precision int8) 
 
 func DrawImage (solutionPath string, precision float64) error {
 
-
 	buffer := make([ ] byte, 8)
 
 	dimensions := interval2d {

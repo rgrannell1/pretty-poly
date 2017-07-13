@@ -39,6 +39,6 @@ func validateDrawArguments (filename string) error {
 	return nil
 }
 
-func Draw (filename string) {
-	DrawImage(filename, 8)
+func Draw (filename string) error {
+	return DrawImage(filename, 8)
 }

@@ -67,11 +67,8 @@ func solveCliCommand (args map[string] interface { }) error {
 
 
 
-func drawCliCommand (args map[string] interface { }) error {
-
-	pretty_poly.Draw(args["<path>"].(string))
-	return nil
-
+func drawCliCommand (path string) error {
+	return pretty_poly.Draw(path)
 }
 
 
@@ -91,7 +88,9 @@ func startCommandLine ( ) error {
 
 	} else if args["draw"] == true {
 
-		return drawCliCommand(args)
+		path := args["<path>"].(string)
+
+		return drawCliCommand(path)
 
 	}
 
