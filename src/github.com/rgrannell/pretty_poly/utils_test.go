@@ -24,19 +24,19 @@ func TestUtils (test *testing.T) {
 
 			gob.It("works for known test cases", func ( ) {
 
-				gob.Assert( toBits(0) ).Equal([ ] bool {false})
-				gob.Assert( toBits(1) ).Equal([ ] bool {true})
-				gob.Assert( toBits(2) ).Equal([ ] bool {true, false})
-				gob.Assert( toBits(3) ).Equal([ ] bool {true, true})
-				gob.Assert( toBits(4) ).Equal([ ] bool {true, false, false})
-				gob.Assert( toBits(5) ).Equal([ ] bool {true, false, true})
+				gob.Assert( toBits(0, 1) ).Equal([ ] bool {false})
+				gob.Assert( toBits(1, 1) ).Equal([ ] bool {true})
+				gob.Assert( toBits(2, 2) ).Equal([ ] bool {true, false})
+				gob.Assert( toBits(3, 2) ).Equal([ ] bool {true, true})
+				gob.Assert( toBits(4, 3) ).Equal([ ] bool {true, false, false})
+				gob.Assert( toBits(5, 3) ).Equal([ ] bool {true, false, true})
 
 			})
 
 			gob.It("does not panic for random input", func ( ) {
 
 				for num := 0; num < 100; num++ {
-					toBits(uint64(num))
+					toBits(uint64(num), 0)
 				}
 
 			})

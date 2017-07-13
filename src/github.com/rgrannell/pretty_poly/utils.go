@@ -25,7 +25,7 @@ func productOf (elems [ ]int) int {
 
 }
 
-func toBits (hash uint64) [ ] bool {
+func toBits (hash uint64, length int) [ ] bool {
 
 	bitString := fmt.Sprintf("%b", hash)
 	bits      := make([ ] bool, len(bitString))
@@ -37,10 +37,13 @@ func toBits (hash uint64) [ ] bool {
 		} else {
 			bits[ith] = true
 		}
-
 	}
 
-	return bits
+	if len(bits) < length {
+		return bits[:length]
+	} else {
+		return bits
+	}
 
 }
 
