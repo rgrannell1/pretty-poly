@@ -9,8 +9,8 @@ import "io/ioutil"
 import "testing"
 import "errors"
 import "github.com/franela/goblin"
-//import "image"
-//import "math"
+import "image"
+import "math"
 
 
 
@@ -60,8 +60,6 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 		})
 
 	})
-
-	/*
 
 	gob.Describe("pretty_poly.DrawImage", func ( ) {
 
@@ -120,8 +118,6 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 		})
 
 	})
-
-	*/
 
 }
 
