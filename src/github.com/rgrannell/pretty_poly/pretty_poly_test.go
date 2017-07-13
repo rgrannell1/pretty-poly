@@ -9,8 +9,12 @@ import "io/ioutil"
 import "testing"
 import "errors"
 import "github.com/franela/goblin"
-import "image"
-import "math"
+//import "image"
+//import "math"
+
+
+
+
 
 
 
@@ -56,6 +60,8 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 		})
 
 	})
+
+	/*
 
 	gob.Describe("pretty_poly.DrawImage", func ( ) {
 
@@ -115,6 +121,8 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 
 	})
 
+	*/
+
 }
 
 
@@ -123,7 +131,13 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 func TestPrettyPoly (test *testing.T) {
 
 	for precision := 8; precision < 10; precision++ {
-		runPrecisionTests(test, float64(precision), 5, 5)
+
+		test.Run("case", func (test *testing.T) {
+
+			runPrecisionTests(test, float64(precision), 5, 5)
+
+		})
+
 	}
 
 }
@@ -144,7 +158,7 @@ func BenchPrettyPoly (bench *testing.B) {
 
 	for precision := 0; precision < 8; precision++ {
 
-		bench.Run("asdasd", func (bench *testing.B) {
+		bench.Run("subcase", func (bench *testing.B) {
 			SolvePolynomials(3, 5, tmpFileName, int8(precision))
 		})
 	}

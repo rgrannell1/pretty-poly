@@ -17,7 +17,7 @@ build: setGoPath
 
 test: FORCE
 
-	docker build -t pretty_poly_tests -f dockerfiles/test-pretty-poly.txt .
+	docker build  -t pretty_poly_tests -f dockerfiles/test-pretty-poly.txt .
 	docker run -i -t pretty_poly_tests
 
 bench: FORCE
@@ -44,7 +44,6 @@ run: FORCE
 	docker run --volume /tmp/pretty_poly_run_mount:/data -i -t pretty_poly
 
 display: run
-
 	display /tmp/pretty_poly_run_mount/test.png
 
 run-debug: FORCE
@@ -52,3 +51,6 @@ run-debug: FORCE
 	docker run -i -t pretty_poly /bin/bash
 
 FORCE:
+
+debug: setGoPath
+	go build -gcflags "-N -l" -o gdb_sandbox github.com/rgrannell/pretty_poly/main.go

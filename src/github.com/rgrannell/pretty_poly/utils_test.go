@@ -6,20 +6,49 @@ package pretty_poly
 
 
 import "fmt"
-import "reflect"
+// import "reflect"
 import "testing"
 import "github.com/franela/goblin"
 
 
 
 
-func runToBitsTest (gob *goblin.G, num uint64, length int, expected [ ] bool ) {
 
-	gob.It("converts to binary correctly", func ( ) {
-		gob.Assert(toBits(num, length)).Equal(expected)
+func TestUtils (test *testing.T) {
+
+	test.Run("toBits", func (test *testing.T) {
+
+		gob := goblin.Goblin(test)
+
+		gob.Describe("toBits", func ( ) {
+
+			gob.It("works for known test cases", func ( ) {
+
+				gob.Assert( toBits(0)[:2] ).Equal([ ] bool {false, false})
+				gob.Assert( toBits(1)[:1] ).Equal([ ] bool {true})
+				gob.Assert( toBits(2)[:2] ).Equal([ ] bool {true, false})
+				gob.Assert( toBits(3)[:2] ).Equal([ ] bool {true, true})
+				gob.Assert( toBits(4)[:3] ).Equal([ ] bool {true, false, true})
+
+			})
+
+			gob.It("does not panic for random input", func ( ) {
+
+				for num := 0; num < 100; num++ {
+						toBits(uint64(num))
+				}
+
+			})
+
+		})
+
+
 	})
 
 }
+
+
+
 
 func TestProductOf (test *testing.T) {
 
@@ -40,39 +69,6 @@ func TestProductOf (test *testing.T) {
 			gob.Assert(productOf( [ ]int {1} )).Equal(1)
 			gob.Assert(productOf( [ ]int {1, 5} )).Equal(5)
 			gob.Assert(productOf( [ ]int {1, 1, 5} )).Equal(5)
-
-		})
-
-	})
-
-}
-
-func TestToBits (test *testing.T) {
-
-	gob := goblin.Goblin(test)
-
-	gob.Describe("toBits", func ( ) {
-
-		gob.It("works for known test cases", func ( ) {
-
-			runToBitsTest(gob, 0, 2, [ ] bool {false, false} )
-			runToBitsTest(gob, 1, 1, [ ] bool {true} )
-			runToBitsTest(gob, 2, 2, [ ] bool {true, false} )
-			runToBitsTest(gob, 3, 2, [ ] bool {true, true} )
-			runToBitsTest(gob, 4, 3, [ ] bool {true, false, false} )
-			runToBitsTest(gob, 5, 3, [ ] bool {true, false, true} )
-			runToBitsTest(gob, 6, 3, [ ] bool {true, true, false} )
-			runToBitsTest(gob, 7, 3, [ ] bool {true, true, true} )
-
-		})
-
-		gob.It("does not panic for random input", func ( ) {
-
-			for num := 0; num < 20; num++ {
-				for len := 0; len < 20; len++ {
-					toBits(uint64(num), len)
-				}
-			}
 
 		})
 
@@ -110,6 +106,7 @@ func TestFromBitsLittleEndian (test *testing.T) {
 
 }
 
+/*
 func TestIntersperseBool (test *testing.T) {
 
 	result0 := IntersperseBool([ ] bool { }, [ ] bool { })
@@ -133,3 +130,6 @@ func TestIntersperseBool (test *testing.T) {
 	_ = result2
 
 }
+
+*/
+

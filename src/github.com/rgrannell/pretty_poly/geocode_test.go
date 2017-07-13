@@ -329,6 +329,8 @@ func runIdempotency (gob *goblin.G, testCase geoHashTestCase) {
 
 }
 
+/*
+
 func TestGeohashIdempotency (test *testing.T) {
 
 	gob := goblin.Goblin(test)
@@ -398,3 +400,5 @@ func TestGeohashIdempotency (test *testing.T) {
 	})
 
 }
+*/
+

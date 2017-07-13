@@ -1,29 +1,30 @@
 FROM ubuntu
 MAINTAINER Ryan Grannell
 
-RUN apt-get update
-
-RUN apt-get update && apt-get install python-software-properties --assume-yes
-RUN add-apt-repository ppa:gophers/archive --yes
-RUN apt-get update && apt-get install golang-1.8 --assume-yes
-
-RUN ln /usr/lib/go-1.8/bin/go /usr/bin/go1.8
 
 RUN mkdir /usr/local/app
 RUN mkdir /usr/local/app/src
+WORKDIR /usr/local/app
+ENV GOPATH /usr/local/app
+
+RUN apt-get update
+
+RUN apt-get update && apt-get install golang-go git --assume-yes
+RUN go get golang.org/x/build/version/go1.9beta1
+
+RUN /usr/local/app/bin/go1.9beta1 download
 
 ADD src /usr/local/app/src
 ADD Makefile /usr/local/app/Makefile
 
 WORKDIR /usr/local/app
 
-ENV GOPATH /usr/local/app
-RUN go get github.com/gonum/matrix
-RUN go get github.com/gonum/floats
-RUN go get github.com/franela/goblin
-RUN go get github.com/docopt/docopt-go
+RUN /usr/local/app/bin/go1.9beta1 get github.com/gonum/matrix
+RUN /usr/local/app/bin/go1.9beta1 get github.com/gonum/floats
+RUN /usr/local/app/bin/go1.9beta1 get github.com/franela/goblin
+RUN /usr/local/app/bin/go1.9beta1 get github.com/docopt/docopt-go
 
 RUN go build github.com/rgrannell/pretty_poly
 RUN go install github.com/rgrannell/pretty_poly
 
-CMD [ "go", "test", "github.com/rgrannell/pretty_poly", "-v", "-bench", ".", "-cover", "-benchmem", "-test.run", "Benchmark", "-count", "2" ]
+CMD [ "/usr/local/app/bin/go1.9beta1", "test", "github.com/rgrannell/pretty_poly", "-v", "-bench", ".", "-cover", "-benchmem", "-test.run", "Benchmark", "-count", "2" ]
