@@ -65,7 +65,11 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 
 		gob.It("creates an output image.", func ( ) {
 
-			DrawImage(tmpFileName, precision)
+			drawErr := DrawImage(tmpFileName, precision)
+
+			if drawErr != nil {
+				panic(drawErr)
+			}
 
 			if _, err := os.Stat(tmpFileName + ".png"); os.IsNotExist(err) {
 				panic(errors.New("file " + tmpFileName + ".png does not exist."))
