@@ -31,10 +31,7 @@ func toBits (hash uint64, length int) [ ] bool {
 	bits      := make([ ] bool, len(bitString))
 
 	for ith, char := range bitString {
-
-		if char == '0' {
-			bits[ith] = false
-		} else {
+		if char == '1' {
 			bits[ith] = true
 		}
 	}
@@ -42,7 +39,7 @@ func toBits (hash uint64, length int) [ ] bool {
 	if len(bits) > length {
 		return bits[:length]
 	} else {
-		return bits
+		return append(make([ ] bool, length - len(bitString)), bits...)
 	}
 
 }

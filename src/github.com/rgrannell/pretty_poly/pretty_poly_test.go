@@ -17,9 +17,6 @@ import "math"
 
 
 
-
-
-
 func runPrecisionTests (test *testing.T, precision float64, extreme int, order int) {
 
 
@@ -71,7 +68,7 @@ func runPrecisionTests (test *testing.T, precision float64, extreme int, order i
 				panic(drawErr)
 			}
 
-			if _, err := os.Stat(tmpFileName + ".png"); os.IsNotExist(err) {
+			if _, err := os.Stat(tmpFileName + ".png") ; os.IsNotExist(err) {
 				panic(errors.New("file " + tmpFileName + ".png does not exist."))
 			}
 
