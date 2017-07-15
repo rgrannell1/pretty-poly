@@ -255,6 +255,7 @@ func Uint64AsGeohash2d (precision int8, hash uint64) (geohash2d, error) {
 
 	bitCount    := 2 * int(precision)
 	bits        := toBits(hash, bitCount)
+
 	xs, ys, err := DisperseBool(bits)
 
 	if err != nil {

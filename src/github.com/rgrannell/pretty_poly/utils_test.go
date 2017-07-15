@@ -25,7 +25,9 @@ func TestUtils (test *testing.T) {
 			gob.It("works for known test cases", func ( ) {
 
 				gob.Assert( toBits(0, 1) ).Equal([ ] bool {false})
+				gob.Assert( toBits(0, 2) ).Equal([ ] bool {false, false})
 				gob.Assert( toBits(1, 1) ).Equal([ ] bool {true})
+				gob.Assert( toBits(1, 4) ).Equal([ ] bool {false, false, false, true})
 				gob.Assert( toBits(2, 2) ).Equal([ ] bool {true, false})
 				gob.Assert( toBits(3, 2) ).Equal([ ] bool {true, true})
 				gob.Assert( toBits(4, 3) ).Equal([ ] bool {true, false, false})
