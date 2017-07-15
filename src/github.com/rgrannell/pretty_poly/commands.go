@@ -14,7 +14,7 @@ func validateSolveArguments (order int, extreme int, filename string) error {
 
 }
 
-func Solve (order int, extreme int, filename string) error {
+func Solve (order int, extreme int, precision int8, filename string) error {
 
 	err := validateSolveArguments(order, extreme, filename)
 
@@ -24,7 +24,7 @@ func Solve (order int, extreme int, filename string) error {
 
 	} else {
 
-		SolvePolynomials(extreme, order, filename, 8)
+		SolvePolynomials(extreme, order, filename, precision)
 		return nil
 
 	}
@@ -35,10 +35,10 @@ func Solve (order int, extreme int, filename string) error {
 
 
 
-func validateDrawArguments (filename string) error {
+func validateDrawArguments (filename string, precision int8) error {
 	return nil
 }
 
-func Draw (filename string) error {
-	return DrawImage(filename, 8)
+func Draw (filename string, precision int8) error {
+	return DrawImage(filename, float64(precision))
 }

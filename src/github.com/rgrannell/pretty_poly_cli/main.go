@@ -3,6 +3,7 @@ package main
 
 
 
+import "fmt"
 import "strconv"
 
 import "github.com/docopt/docopt-go"
@@ -13,7 +14,7 @@ import "github.com/rgrannell/pretty_poly"
 
 const commandUsage = `
 Usage:
-	pretty_poly solve --path <path> [--extreme <extreme>] [--order <order>] [--precision <num>]
+	pretty_poly solve --path <path> [--extreme <extreme>] [--order <order>] [--precision <precision>]
 	pretty_poly draw  --path <path>
 
 	pretty_poly -h | --help
@@ -25,8 +26,8 @@ Description:
 Options:
 	--path      <path>       asdasd .
 	--extreme   <extreme>    The largest integer coefficient to use [default: 5].
-	--order     <order>      The order of the polynomial to solve [default: 3].
-	--precision <num>        the precision at which to plot [default: 10].
+	--order     <order>      The order of the polynomial to solve   [default: 3].
+	--precision <precision>  the precision at which to plot         [default: 10].
 	-h, --help               Show this documentation.
 	--version                Show the package version.
 `
@@ -36,6 +37,12 @@ Options:
 
 
 func solveCliCommand (args map[string] interface { }) error {
+
+	precision, parsePrecisionErr = strconv.ParseInt(args["<precision>"].(string), 10, 8)
+
+	if parsePrecisionErr != nil {
+		return parsePrecisionErr
+	}
 
 	order, parseOrderErr := strconv.ParseInt(args["<order>"].(string), 10, 64)
 
@@ -49,11 +56,9 @@ func solveCliCommand (args map[string] interface { }) error {
 		return parseIntErr
 	}
 
-	runTimeErr := pretty_poly.Solve(
-		int(order),
-		int(extreme),
-		args["<path>"].(string),
-	)
+	path := args["<path>"].(string)
+
+	runTimeErr := pretty_poly.Solve(int(order), int(extreme), precision, path)
 
 	if runTimeErr != nil {
 		return runTimeErr
@@ -67,8 +72,18 @@ func solveCliCommand (args map[string] interface { }) error {
 
 
 
-func drawCliCommand (path string) error {
-	return pretty_poly.Draw(path)
+func drawCliCommand (args map[string] interface { }) error {
+
+	precision, parsePrecisionErr = strconv.ParseInt(args["<precision>"].(string), 10, 8)
+
+	if parsePrecisionErr != nil {
+		return parsePrecisionErr
+	}
+
+
+	return pretty_poly.Draw(args["<path>"].(string), precision)
+
+
 }
 
 
@@ -88,9 +103,7 @@ func startCommandLine ( ) error {
 
 	} else if args["draw"] == true {
 
-		path := args["<path>"].(string)
-
-		return drawCliCommand(path)
+		return drawCliCommand(args)
 
 	}
 
