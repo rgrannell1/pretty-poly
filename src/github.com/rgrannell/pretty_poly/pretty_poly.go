@@ -1,6 +1,7 @@
 
 package pretty_poly
 
+import "log"
 import "sync"
 import "math"
 import "io"
@@ -145,7 +146,24 @@ func SolvePolynomials (extreme int, order int, filepath string, precision int8) 
 
 func DrawImage (solutionPath string, precision float64) error {
 
+	conn, err := os.OpenFile("/var/log/pretty-poly.log", os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0644)
+
+	if err != nil {
+		return err
+	}
+
+	defer conn.Close( )
+	log.SetOutput(conn)
+
 	buffer := make([ ] byte, 8)
+	logger := NewEmitter( )
+
+	logger.Emit(EVENT_DRAW_IMAGE)
+	logger.On(EVENT_DRAW_IMAGE, func (arg ...interface{ }) {
+
+		log.Println("aaaaaaaaaaaaaaaaaaaaa")
+
+	})
 
 	dimensions := interval2d {
 		x: interval {

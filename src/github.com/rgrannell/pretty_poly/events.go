@@ -17,7 +17,7 @@ type Listener struct {
 
 
 
-func New( ) *Emitter {
+func NewEmitter( ) *Emitter {
 
 	emitter := new(Emitter)
 
@@ -29,7 +29,7 @@ func New( ) *Emitter {
 
 
 
-func (self *Emitter) On(event, callback func(...interface{ })) *Emitter {
+func (self *Emitter) On(event string, callback func(...interface{ })) *Emitter {
 
 	if _, ok := self.listeners[event]; !ok {
 		self.listeners[event] = [ ]Listener{ }
@@ -41,7 +41,7 @@ func (self *Emitter) On(event, callback func(...interface{ })) *Emitter {
 
 }
 
-func (self *Emitter) Emit(event string, args[ ]interface{ }) *Emitter {
+func (self *Emitter) Emit(event string, args ...interface{ }) *Emitter {
 
 	for _, listener := range(self.listeners[event]) {
 		go listener.callback(args...)
@@ -51,3 +51,11 @@ func (self *Emitter) Emit(event string, args[ ]interface{ }) *Emitter {
 
 }
 
+
+
+
+
+
+const (
+	EVENT_DRAW_IMAGE = "DRAW_IMAGE"
+)

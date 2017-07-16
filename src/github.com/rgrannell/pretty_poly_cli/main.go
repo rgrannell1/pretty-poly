@@ -98,7 +98,10 @@ func startCommandLine ( ) error {
 	}
 
 	for key, value := range args {
- 	   fmt.Println("Key:", key, "Value:", value)
+
+ 	   fmt.Println("Key:", key)
+ 	   fmt.Println("Value:", value)
+
 	}
 
 	if args["solve"] == true {
