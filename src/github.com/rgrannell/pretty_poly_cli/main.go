@@ -15,7 +15,7 @@ import "github.com/rgrannell/pretty_poly"
 const commandUsage = `
 Usage:
 	pretty_poly solve --path <path> [--extreme <extreme>] [--order <order>] [--precision <precision>]
-	pretty_poly draw  --path <path>
+	pretty_poly draw  --path <path> [--precision <precision>]
 
 	pretty_poly -h | --help
 	pretty_poly --version
@@ -92,6 +92,10 @@ func drawCliCommand (args map[string] interface { }) error {
 func startCommandLine ( ) error {
 
 	args, err := docopt.Parse(commandUsage, nil, true, "Pretty Poly 0.1", false)
+
+	for key, value := range args {
+ 	   fmt.Println("Key:", key, "Value:", value)
+	}
 
 	if err != nil {
 		return err
