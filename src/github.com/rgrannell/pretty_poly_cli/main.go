@@ -58,7 +58,7 @@ func solveCliCommand (args map[string] interface { }) error {
 
 	path := args["<path>"].(string)
 
-	runTimeErr := pretty_poly.Solve(int(order), int(extreme), precision, path)
+	runTimeErr := pretty_poly.Solve(int(order), int(extreme), int8(precision), path)
 
 	if runTimeErr != nil {
 		return runTimeErr
@@ -81,7 +81,7 @@ func drawCliCommand (args map[string] interface { }) error {
 	}
 
 
-	return pretty_poly.Draw(args["<path>"].(string), precision)
+	return pretty_poly.Draw(args["<path>"].(string), int8(precision))
 
 
 }
