@@ -38,7 +38,7 @@ Options:
 
 func solveCliCommand (args map[string] interface { }) error {
 
-	precision, parsePrecisionErr := strconv.ParseInt(args["<precision>"].(string), 10, 8)
+	precision, parsePrecisionErr := strconv.ParseInt(args["--precision"].(string), 10, 8)
 
 	if parsePrecisionErr != nil {
 		return parsePrecisionErr
@@ -74,7 +74,7 @@ func solveCliCommand (args map[string] interface { }) error {
 
 func drawCliCommand (args map[string] interface { }) error {
 
-	precision, parsePrecisionErr := strconv.ParseInt(args["<precision>"].(string), 10, 8)
+	precision, parsePrecisionErr := strconv.ParseInt(args["--precision"].(string), 10, 8)
 
 	if parsePrecisionErr != nil {
 		return parsePrecisionErr

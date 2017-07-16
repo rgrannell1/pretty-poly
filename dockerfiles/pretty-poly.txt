@@ -19,4 +19,4 @@ RUN go get github.com/gonum/floats
 RUN go get github.com/franela/goblin
 RUN go get github.com/docopt/docopt-go
 
-CMD go run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path /data/test --extreme 5 --order 5 --precision 12 && go run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path /data/test --precision 12
+CMD go run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path /data/test --extreme 10 --order 10 --precision 12 && go run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path /data/test --precision 12
