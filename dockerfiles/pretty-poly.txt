@@ -1,6 +1,11 @@
 FROM ubuntu
 MAINTAINER Ryan Grannell
 
+ARG exteme=10
+ARG order=10
+ARG precision=12
+ARG data_path="/data/test"
+
 RUN mkdir /data
 VOLUME /data
 
@@ -19,4 +24,4 @@ RUN go get github.com/gonum/floats
 RUN go get github.com/franela/goblin
 RUN go get github.com/docopt/docopt-go
 
-CMD go run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path /data/test --extreme 10 --order 10 --precision 12 && go run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path /data/test --precision 12
+CMD go run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path "${data_path}" --extreme "${extreme}" --order "${order}" --precision "${precision}" && go run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path "${data_path}" --precision "${precision}"

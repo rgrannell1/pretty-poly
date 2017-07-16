@@ -1,7 +1,6 @@
 FROM ubuntu
 MAINTAINER Ryan Grannell
 
-
 RUN mkdir /usr/local/app
 RUN mkdir /usr/local/app/src
 WORKDIR /usr/local/app
