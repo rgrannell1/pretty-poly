@@ -18,5 +18,11 @@ RUN go get github.com/gonum/matrix
 RUN go get github.com/gonum/floats
 RUN go get github.com/franela/goblin
 RUN go get github.com/docopt/docopt-go
+RUN go get github.com/alash3al/goemitter
 
-CMD go run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path "/data/test" --extreme "4" --order "4" --precision "12" && go run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path "/data/test" --precision "12"
+ENV extreme 6
+ENV order 6
+ENV precision 11
+ENV data_path "/data/test"
+
+CMD go run src/github.com/rgrannell/pretty_poly_cli/main.go solve --path "$data_path" --extreme "$extreme" --order "$order" --precision "$precision" && go run src/github.com/rgrannell/pretty_poly_cli/main.go draw  --path "$data_path" --precision "$precision"

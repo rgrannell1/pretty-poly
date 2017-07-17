@@ -11,6 +11,7 @@ import "encoding/binary"
 import "image"
 import "image/png"
 import "image/color"
+import "github.com/alash3al/goemitter"
 
 
 
@@ -156,14 +157,18 @@ func DrawImage (solutionPath string, precision float64) error {
 	log.SetOutput(conn)
 
 	buffer := make([ ] byte, 8)
-	logger := NewEmitter( )
+	logger := Emitter.Construct( )
 
-	logger.Emit(EVENT_DRAW_IMAGE)
-	logger.On(EVENT_DRAW_IMAGE, func (arg ...interface{ }) {
+	logger.On("draw-image", func (arg ...interface{ }) {
 
-		log.Println("aaaaaaaaaaaaaaaaaaaaa")
+		log.Println(Log {
+			level: "info",
+			user_message: "started drawing image.",
+		})
 
 	})
+
+	logger.EmitSync("draw-image")
 
 	dimensions := interval2d {
 		x: interval {
