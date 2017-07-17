@@ -159,7 +159,8 @@ func DrawImage (solutionPath string, precision float64) error {
 	buffer := make([ ] byte, 8)
 	logger := Emitter.Construct( )
 
-	logger.On("draw-image", func (arg ...interface{ }) {
+
+	logger.On(EVENT_DRAW_IMAGE, func (arg ...interface{ }) {
 
 		log.Println(Log {
 			level: "info",
@@ -168,7 +169,41 @@ func DrawImage (solutionPath string, precision float64) error {
 
 	})
 
-	logger.EmitSync("draw-image")
+	logger.On(EVENT_DRAW_READ, func (arg ...interface{ }) {
+
+		log.Println(Log {
+			level: "info",
+			user_message: "reading lines from file.",
+		})
+
+	})
+
+	logger.On(EVENT_DRAW_READ_DONE, func (arg ...interface{ }) {
+
+		log.Println(Log {
+			level: "info",
+			user_message: "finished reading lines between files.",
+		})
+
+	})
+
+	logger.On(EVENT_DRAWN, func (arg ...interface{ }) {
+
+		log.Println(Log {
+			level: "info",
+			user_message: "drawing done.",
+		})
+
+	})
+
+
+
+
+
+	logger.EmitSync(EVENT_DRAW_IMAGE)
+	logger.EmitSync(EVENT_DRAW_READ)
+	logger.EmitSync(EVENT_DRAW_READ_DONE)
+	logger.EmitSync(EVENT_DRAWN)
 
 	dimensions := interval2d {
 		x: interval {
@@ -210,6 +245,8 @@ func DrawImage (solutionPath string, precision float64) error {
 		return err
 	}
 
+	logger.EmitSync(EVENT_DRAW_IMAGE)
+
 	for {
 
 		count, err := solutionConn.Read(buffer)
@@ -232,6 +269,8 @@ func DrawImage (solutionPath string, precision float64) error {
 
 	}
 
+	logger.EmitSync(EVENT_DRAW_READ_DONE)
+
 	outConn, outErr := os.Create(solutionPath + ".png")
 
 	if outErr != nil {
@@ -247,6 +286,8 @@ func DrawImage (solutionPath string, precision float64) error {
 	}
 
 	outConn.Sync( )
+
+	logger.EmitSync(EVENT_DRAWN)
 
 	return nil
 
