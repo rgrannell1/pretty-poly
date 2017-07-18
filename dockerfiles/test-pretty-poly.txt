@@ -20,6 +20,8 @@ RUN /usr/local/app/bin/go1.9beta1 get github.com/gonum/matrix
 RUN /usr/local/app/bin/go1.9beta1 get github.com/gonum/floats
 RUN /usr/local/app/bin/go1.9beta1 get github.com/franela/goblin
 RUN /usr/local/app/bin/go1.9beta1 get github.com/docopt/docopt-go
+RUN /usr/local/app/bin/go1.9beta1 get github.com/derekparker/delve/cmd/dlv
+
 
 RUN	/usr/local/app/bin/go1.9beta1 build github.com/rgrannell/pretty_poly
 RUN /usr/local/app/bin/go1.9beta1 install github.com/rgrannell/pretty_poly
