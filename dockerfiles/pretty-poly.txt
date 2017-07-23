@@ -20,8 +20,8 @@ RUN go get github.com/franela/goblin
 RUN go get github.com/docopt/docopt-go
 RUN go get github.com/alash3al/goemitter
 
-ENV extreme 6
-ENV order 6
+ENV extreme 3
+ENV order 3
 ENV precision 11
 ENV data_path "/data/test"
 

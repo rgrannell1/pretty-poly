@@ -1,4 +1,4 @@
- FROM ubuntu
+FROM ubuntu
 MAINTAINER Ryan Grannell
 
 RUN mkdir /usr/local/app
