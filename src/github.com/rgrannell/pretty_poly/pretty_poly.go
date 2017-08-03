@@ -2,6 +2,7 @@
 package pretty_poly
 
 import "log"
+import "sync"
 import "math"
 import "io"
 import "os"
@@ -18,7 +19,7 @@ func solveRange (offset int, exploredBases [ ] int, extreme int, processes int) 
 	coefficientCount := productOf(exploredBases)
 	solutions        := make(chan [ ]complex128, processes)
 
-	go func ( ) {
+	go func ( 	) {
 
 		for ith := offset; ith < coefficientCount; ith += processes {
 			solutions <- solvePolynomial( toCompanionMatrix(toMixedRadix(exploredBases, ith), float64(extreme)) )
@@ -36,7 +37,11 @@ func solveRange (offset int, exploredBases [ ] int, extreme int, processes int) 
 
 func mergeSolutions (inputs [ ] chan [ ]complex128) chan [ ]complex128 {
 
+	var mergeGroup sync.WaitGroup
+
 	output := make(chan [ ]complex128)
+
+	mergeGroup.Add(len(inputs))
 
 	for _, input := range inputs {
 
@@ -46,9 +51,18 @@ func mergeSolutions (inputs [ ] chan [ ]complex128) chan [ ]complex128 {
 				output <- solution
 			}
 
+			mergeGroup.Done( )
+
 		}(input)
 
 	}
+
+	go func ( ) {
+
+		mergeGroup.Wait( )
+		close(output)
+
+	}( )
 
 	return output
 
@@ -79,11 +93,16 @@ func SolvePolynomials (extreme int, order int, filepath string, precision int8) 
 		exploredBases[ith] = (2 * extreme) + 1
 	}
 
-	var solutions [ ] chan [ ]complex128
+	solutions := make([ ] chan [ ]complex128, processes)
 
-	for offset := 0; offset < processes; offset ++ {
-		solutions = append(solutions, solveRange(offset, exploredBases, extreme, processes))
-	}
+	func ( ) {
+
+		for offset := 0; offset < processes; offset ++ {
+			solutions = append(solutions, solveRange(offset, exploredBases, extreme, processes))
+		}
+
+	}( )
+
 
 	for x := range mergeSolutions(solutions) {
 		println(x)
@@ -178,7 +197,7 @@ func DrawImage (solutionPath string, precision float64) error {
 	for ith := dimensions.x.lower; ith < dimensions.x.upper; ith++ {
 		for jth := dimensions.y.lower; jth < dimensions.y.upper; jth++ {
 
-			img.	.Set(int(ith), int(jth), color.RGBA {
+			img.content.Set(int(ith), int(jth), color.RGBA {
 				25,
 				25,
 				25,
