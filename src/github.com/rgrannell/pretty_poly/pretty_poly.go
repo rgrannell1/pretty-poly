@@ -75,14 +75,39 @@ func writeManager (filepath string, solutionsChan chan [ ] complex128, writeChan
 
 
 
-func SolvePolynomials (extreme int, order int, filepath string, precision int8) {
 
-	processes := 20
+
+func emitWrites (solutionsChan chan [ ] complex128, precision int8, writeChan chan uint64) {
 
 	args := appArguments {
 		precision:  precision,
 		dimensions: Interval2d(-10, 10, -10, 10),
 	}
+
+	for solutions := range solutionsChan {
+		for _, solution := range solutions {
+
+			encoded, err := processSolution(solution, args)
+
+			if err != nil {
+				panic("aarrgghh!")
+			}
+
+			writeChan <- encoded
+
+		}
+	}
+
+}
+
+
+
+
+
+
+func SolvePolynomials (extreme int, order int, filepath string, precision int8) {
+
+	processes := 20
 
 	var solveGroup sync.WaitGroup
 
@@ -120,23 +145,7 @@ func SolvePolynomials (extreme int, order int, filepath string, precision int8) 
 	writeChan := make(chan uint64, 100)
 
 	go writeManager(filepath, solutionsChan, writeChan)
-	go func ( ) {
-
-		for solutions := range solutionsChan {
-			for _, solution := range solutions {
-
-				encoded, err := processSolution(solution, args)
-
-				if err != nil {
-					panic("aarrgghh!")
-				}
-
-				writeChan <- encoded
-
-			}
-		}
-
-	}( )
+	go emitWrites(solutionsChan, precision, writeChan)
 
 	solveGroup.Wait( )
 
@@ -160,7 +169,7 @@ func DrawImage (solutionPath string, precision float64) error {
 	logger := Emitter.Construct( )
 
 
-	logger.On(EVENT_DRAW_IMAGE, func (arg ...interface{ }) {
+	logger.On("EVENT_DRAW_IMAGE", func (arg ...interface{ }) {
 
 		log.Println(Log {
 			level: "info",
@@ -169,7 +178,7 @@ func DrawImage (solutionPath string, precision float64) error {
 
 	})
 
-	logger.On(EVENT_DRAW_READ, func (arg ...interface{ }) {
+	logger.On("EVENT_DRAW_READ", func (arg ...interface{ }) {
 
 		log.Println(Log {
 			level: "info",
@@ -178,7 +187,7 @@ func DrawImage (solutionPath string, precision float64) error {
 
 	})
 
-	logger.On(EVENT_DRAW_READ_DONE, func (arg ...interface{ }) {
+	logger.On("EVENT_DRAW_READ_DONE", func (arg ...interface{ }) {
 
 		log.Println(Log {
 			level: "info",
@@ -187,7 +196,7 @@ func DrawImage (solutionPath string, precision float64) error {
 
 	})
 
-	logger.On(EVENT_DRAWN, func (arg ...interface{ }) {
+	logger.On("EVENT_DRAWN", func (arg ...interface{ }) {
 
 		log.Println(Log {
 			level: "info",
@@ -200,10 +209,10 @@ func DrawImage (solutionPath string, precision float64) error {
 
 
 
-	logger.EmitSync(EVENT_DRAW_IMAGE)
-	logger.EmitSync(EVENT_DRAW_READ)
-	logger.EmitSync(EVENT_DRAW_READ_DONE)
-	logger.EmitSync(EVENT_DRAWN)
+	logger.EmitSync("EVENT_DRAW_IMAGE")
+	logger.EmitSync("EVENT_DRAW_READ")
+	logger.EmitSync("EVENT_DRAW_READ_DONE")
+	logger.EmitSync("EVENT_DRAWN")
 
 	dimensions := interval2d {
 		x: interval {
@@ -245,7 +254,7 @@ func DrawImage (solutionPath string, precision float64) error {
 		return err
 	}
 
-	logger.EmitSync(EVENT_DRAW_IMAGE)
+	logger.EmitSync("EVENT_DRAW_IMAGE")
 
 	for {
 
@@ -269,7 +278,7 @@ func DrawImage (solutionPath string, precision float64) error {
 
 	}
 
-	logger.EmitSync(EVENT_DRAW_READ_DONE)
+	logger.EmitSync("EVENT_DRAW_READ_DONE")
 
 	outConn, outErr := os.Create(solutionPath + ".png")
 
@@ -287,7 +296,7 @@ func DrawImage (solutionPath string, precision float64) error {
 
 	outConn.Sync( )
 
-	logger.EmitSync(EVENT_DRAWN)
+	logger.EmitSync("EVENT_DRAWN")
 
 	return nil
 
