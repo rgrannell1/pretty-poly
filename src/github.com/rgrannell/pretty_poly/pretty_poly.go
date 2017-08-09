@@ -209,8 +209,7 @@ func readGeocodeSolutions (solutionConn *os.File) (chan error, chan geohash2d) {
 
 
 
-
-
+// Display
 func DrawImage (solutionPath string, precision float64) error {
 
 	conn, err := os.OpenFile("/var/log/pretty-poly.log", os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0644)
