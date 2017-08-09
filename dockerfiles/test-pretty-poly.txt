@@ -12,16 +12,14 @@ RUN go get golang.org/x/build/version/go1.9beta1
 
 RUN /usr/local/app/bin/go1.9beta1 download
 
-ADD src /usr/local/app/src
-ADD Makefile /usr/local/app/Makefile
-
-
 RUN /usr/local/app/bin/go1.9beta1 get github.com/gonum/matrix
 RUN /usr/local/app/bin/go1.9beta1 get github.com/gonum/floats
 RUN /usr/local/app/bin/go1.9beta1 get github.com/franela/goblin
 RUN /usr/local/app/bin/go1.9beta1 get github.com/docopt/docopt-go
 RUN /usr/local/app/bin/go1.9beta1 get github.com/alash3al/goemitter
 
+ADD src /usr/local/app/src
+ADD Makefile /usr/local/app/Makefile
 
 RUN	/usr/local/app/bin/go1.9beta1 build github.com/rgrannell/pretty_poly
 RUN /usr/local/app/bin/go1.9beta1 install github.com/rgrannell/pretty_poly

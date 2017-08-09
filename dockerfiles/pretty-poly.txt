@@ -4,9 +4,6 @@ MAINTAINER Ryan Grannell
 RUN mkdir /data
 VOLUME /data
 
-ADD src /usr/local/app/src
-ADD Makefile /usr/local/app/Makefile
-
 RUN mkdir -p /usr/local/app/src
 WORKDIR /usr/local/app
 
@@ -19,6 +16,9 @@ RUN go get github.com/gonum/floats
 RUN go get github.com/franela/goblin
 RUN go get github.com/docopt/docopt-go
 RUN go get github.com/alash3al/goemitter
+
+ADD src /usr/local/app/src
+ADD Makefile /usr/local/app/Makefile
 
 ENV extreme 6
 ENV order 6

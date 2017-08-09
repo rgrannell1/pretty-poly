@@ -1,4 +1,5 @@
-franela
-gonum
-pkg
-docopt
+src/
+!rgrannell
+.vscode
+bin/
+pkg/

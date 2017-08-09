@@ -103,6 +103,20 @@ func emitWrites (solutionsChan chan [ ] complex128, precision int8, writeChan ch
 
 
 
+func writeSolutions (filepath string, solutionsChan chan [ ] complex128, precision int8, solveGroup *sync.WaitGroup) {
+
+	writeChan := make(chan uint64, 100)
+
+	go writeManager(filepath, solutionsChan, writeChan)
+	go emitWrites(solutionsChan, precision, writeChan)
+
+	solveGroup.Wait( )
+
+
+}
+
+
+
 
 
 func SolvePolynomials (extreme int, order int, filepath string, precision int8) {
@@ -142,14 +156,11 @@ func SolvePolynomials (extreme int, order int, filepath string, precision int8) 
 
 	}
 
-	writeChan := make(chan uint64, 100)
-
-	go writeManager(filepath, solutionsChan, writeChan)
-	go emitWrites(solutionsChan, precision, writeChan)
-
-	solveGroup.Wait( )
+	writeSolutions(filepath, solutionsChan, precision, &solveGroup)
 
 }
+
+
 
 
 
