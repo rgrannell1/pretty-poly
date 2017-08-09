@@ -12,6 +12,10 @@
 - [x] dockerised testing
 - [x] continuous testing
 - [ ] snap packaging
+- [ ] logging
+- [ ] real-time rate-estimation
+- [ ] standard image output
+- [ ] geocode image output
 
 ### Changelog
 
