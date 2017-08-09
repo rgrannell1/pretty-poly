@@ -103,17 +103,16 @@ func emitWrites (solutionsChan chan [ ] complex128, precision int8, writeChan ch
 
 
 
-func writeSolutions (filepath string, solutionsChan chan [ ] complex128, precision int8, solveGroup *sync.WaitGroup) {
+
+func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, precision int8) {
 
 	writeChan := make(chan uint64, 100)
 
 	go writeManager(filepath, solutionsChan, writeChan)
 	go emitWrites(solutionsChan, precision, writeChan)
 
-	solveGroup.Wait( )
-
-
 }
+
 
 
 
@@ -156,7 +155,47 @@ func SolvePolynomials (extreme int, order int, filepath string, precision int8) 
 
 	}
 
-	writeSolutions(filepath, solutionsChan, precision, &solveGroup)
+	writeGeocodeSolutions(filepath, solutionsChan, precision)
+	solveGroup.Wait( )
+
+}
+
+func readGeocodeSolutions (solutionConn *os.File) (chan error, chan geohash2d) {
+
+	buffer    := make([ ] byte, 8)
+	solutions := make(chan geohash2d, 1)
+	errs      := make(chan error, 1)
+
+	go func ( ) {
+
+		for {
+
+			count, err := solutionConn.Read(buffer)
+
+			if err != nil && err != io.EOF {
+				errs <- err
+			}
+
+			if count != 8 {
+				break
+			}
+
+			solution, err := Uint64AsGeohash2d(8, binary.LittleEndian.Uint64(buffer))
+
+			if err != nil {
+				errs <- err
+			} else {
+				solutions <- solution
+			}
+
+		}
+
+		close(solutions)
+		close(errs)
+
+	}( )
+
+	return errs, solutions
 
 }
 
@@ -176,9 +215,7 @@ func DrawImage (solutionPath string, precision float64) error {
 	defer conn.Close( )
 	log.SetOutput(conn)
 
-	buffer := make([ ] byte, 8)
 	logger := Emitter.Construct( )
-
 
 	logger.On("EVENT_DRAW_IMAGE", func (arg ...interface{ }) {
 
@@ -267,27 +304,33 @@ func DrawImage (solutionPath string, precision float64) error {
 
 	logger.EmitSync("EVENT_DRAW_IMAGE")
 
+	errs, solutions := readGeocodeSolutions(solutionConn)
+
 	for {
 
-		count, err := solutionConn.Read(buffer)
-
-		if err != nil && err != io.EOF {
+		select {
+		case err := <-errs:
 			return err
+
+		case solution, ok := <- solutions:
+
+			if !ok {
+				solutions = nil
+			}
+
+			img.Set(solution, dimensions)
 		}
 
-		if count != 8 {
+		if solutions == nil {
 			break
 		}
 
-		solution, err := Uint64AsGeohash2d(8, binary.LittleEndian.Uint64(buffer))
-
-		if err != nil {
-			return err
-		}
-
-		img.Set(solution, dimensions)
-
 	}
+
+
+
+
+
 
 	logger.EmitSync("EVENT_DRAW_READ_DONE")
 
