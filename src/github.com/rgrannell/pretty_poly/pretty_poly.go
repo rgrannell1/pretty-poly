@@ -113,12 +113,7 @@ func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, 
 
 }
 
-
-
-
-
-
-func SolvePolynomials (extreme int, order int, filepath string, precision int8) {
+func startSolutionWorkers (extreme int, order int, precision int8) (chan [ ] complex128, *sync.WaitGroup) {
 
 	processes := 20
 
@@ -155,7 +150,19 @@ func SolvePolynomials (extreme int, order int, filepath string, precision int8) 
 
 	}
 
+	return solutionsChan, &solveGroup
+}
+
+
+
+
+
+
+func SolvePolynomials (extreme int, order int, filepath string, precision int8) {
+
+	solutionsChan, solveGroup := startSolutionWorkers(extreme, order, precision)
 	writeGeocodeSolutions(filepath, solutionsChan, precision)
+
 	solveGroup.Wait( )
 
 }
@@ -326,11 +333,6 @@ func DrawImage (solutionPath string, precision float64) error {
 		}
 
 	}
-
-
-
-
-
 
 	logger.EmitSync("EVENT_DRAW_READ_DONE")
 
