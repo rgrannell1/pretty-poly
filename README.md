@@ -11,7 +11,12 @@
 - [x] command-line interface
 - [x] dockerised testing
 - [x] continuous testing
+- [ ] godoc
 - [ ] snap packaging
+- [ ] logging
+- [ ] real-time rate-estimation
+- [ ] standard image output
+- [ ] geocode image output
 
 ### Changelog
 
