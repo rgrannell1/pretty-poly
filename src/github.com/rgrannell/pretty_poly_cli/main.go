@@ -3,7 +3,6 @@ package main
 
 
 
-import "fmt"
 import "strconv"
 
 import "github.com/docopt/docopt-go"
@@ -95,13 +94,6 @@ func startCommandLine ( ) error {
 
 	if err != nil {
 		return err
-	}
-
-	for key, value := range args {
-
- 	   fmt.Println("Key:", key)
- 	   fmt.Println("Value:", value)
-
 	}
 
 	if args["solve"] == true {

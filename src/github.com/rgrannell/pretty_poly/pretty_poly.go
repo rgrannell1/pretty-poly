@@ -1,6 +1,7 @@
 
 package pretty_poly
 
+import "fmt"
 import "log"
 import "sync"
 import "math"
@@ -13,6 +14,10 @@ import "image/png"
 import "image/color"
 import "github.com/alash3al/goemitter"
 
+
+
+
+var logger *Emitter.Emitter
 
 
 
@@ -104,7 +109,7 @@ func emitWrites (solutionsChan chan [ ] complex128, precision int8, writeChan ch
 
 
 
-func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, precision int8) {
+func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, precision int8, logger *Emitter.Emitter) {
 
 	writeChan := make(chan uint64, 100)
 
@@ -113,9 +118,10 @@ func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, 
 
 }
 
-func startSolutionWorkers (extreme int, order int, precision int8) (chan [ ] complex128, *sync.WaitGroup) {
+func startSolutionWorkers (extreme int, order int, precision int8, logger *Emitter.Emitter) (chan [ ] complex128, *sync.WaitGroup) {
 
 	processes := 20
+	solved := 0
 
 	var solveGroup sync.WaitGroup
 
@@ -134,16 +140,37 @@ func startSolutionWorkers (extreme int, order int, precision int8) (chan [ ] com
 
 	for offset := 0; offset < processes; offset++ {
 
+		log.Println(Log {
+			level: "debug",
+			user_message: fmt.Sprintf("solution %v started.", offset),
+		})
+
 		solveGroup.Add(1)
 
 		go func (offset int) {
 
 			defer solveGroup.Done( )
+			defer log.Println(Log {
+				level: "debug",
+				user_message: fmt.Sprintf("solution %v finshed.", offset),
+			})
 
 			coefficientCount := productOf(exploredBases)
 
 			for ith := offset; ith < coefficientCount; ith += processes {
+
+				solved++
 				solutionsChan <- solvePolynomial( toCompanionMatrix(toMixedRadix(exploredBases, ith), float64(extreme)) )
+
+				if (solved % 10000 == 0) {
+
+					log.Println(Log {
+						level: "debug",
+						user_message: fmt.Sprintf("asdasd"),
+					})
+
+				}
+
 			}
 
 		}(offset)
@@ -158,12 +185,28 @@ func startSolutionWorkers (extreme int, order int, precision int8) (chan [ ] com
 
 
 
-func SolvePolynomials (extreme int, order int, filepath string, precision int8) {
+func SolvePolynomials (extreme int, order int, filepath string, precision int8) error {
 
-	solutionsChan, solveGroup := startSolutionWorkers(extreme, order, precision)
-	writeGeocodeSolutions(filepath, solutionsChan, precision)
+	conn, err := os.OpenFile("./baz.log", os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0644)
+
+	if err != nil {
+		return err
+	}
+
+	defer conn.Close( )
+
+	multiWriter := io.MultiWriter(os.Stdout, conn)
+
+	log.SetOutput(multiWriter)
+
+	logger = Emitter.Construct( )
+
+	solutionsChan, solveGroup := startSolutionWorkers(extreme, order, precision, logger)
+	writeGeocodeSolutions(filepath, solutionsChan, precision, logger)
 
 	solveGroup.Wait( )
+
+	return nil
 
 }
 
@@ -219,9 +262,12 @@ func DrawImage (solutionPath string, precision float64) error {
 	}
 
 	defer conn.Close( )
-	log.SetOutput(conn)
 
-	logger := Emitter.Construct( )
+	multiWriter := io.MultiWriter(os.Stdout, conn)
+
+	log.SetOutput(multiWriter)
+
+	logger = Emitter.Construct( )
 
 	logger.On("EVENT_DRAW_IMAGE", func (arg ...interface{ }) {
 
