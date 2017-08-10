@@ -5,6 +5,7 @@ import "fmt"
 import "log"
 import "sync"
 import "math"
+import "time"
 import "io"
 import "os"
 import "bufio"
@@ -121,7 +122,8 @@ func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, 
 func startSolutionWorkers (extreme int, order int, precision int8, logger *Emitter.Emitter) (chan [ ] complex128, *sync.WaitGroup) {
 
 	processes := 20
-	solved := 0
+	solved    := 0
+	startTime := time.Now( )
 
 	var solveGroup sync.WaitGroup
 
@@ -162,11 +164,14 @@ func startSolutionWorkers (extreme int, order int, precision int8, logger *Emitt
 				solved++
 				solutionsChan <- solvePolynomial( toCompanionMatrix(toMixedRadix(exploredBases, ith), float64(extreme)) )
 
-				if (solved % 10000 == 0) {
+				if (solved % 1e5 == 0) {
+
+					elapsedTime := time.Since(startTime).Seconds( )
+					rate        := float64(solved) / elapsedTime
 
 					log.Println(Log {
-						level: "debug",
-						user_message: fmt.Sprintf("asdasd"),
+						level: "info",
+						user_message: fmt.Sprintf("%v solved (%v per second)", solved, int(rate)),
 					})
 
 				}
