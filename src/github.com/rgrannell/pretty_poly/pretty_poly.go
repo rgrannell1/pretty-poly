@@ -4,6 +4,7 @@ package pretty_poly
 import "fmt"
 import "log"
 import "sync"
+import "sync/atomic"
 import "math"
 import "time"
 import "io"
@@ -122,7 +123,7 @@ func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, 
 func startSolutionWorkers (extreme int, order int, precision int8, logger *Emitter.Emitter) (chan [ ] complex128, *sync.WaitGroup) {
 
 	processes := 20
-	solved    := 0
+	var solved uint64 = 0
 	startTime := time.Now( )
 
 	var solveGroup sync.WaitGroup
@@ -161,8 +162,8 @@ func startSolutionWorkers (extreme int, order int, precision int8, logger *Emitt
 
 			for ith := offset; ith < coefficientCount; ith += processes {
 
-				solved++
 				solutionsChan <- solvePolynomial( toCompanionMatrix(toMixedRadix(exploredBases, ith), float64(extreme)) )
+				atomic.AddUint64(&solved, 1)
 
 				if (solved % 1e5 == 0) {
 
