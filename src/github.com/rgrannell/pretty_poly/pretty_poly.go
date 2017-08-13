@@ -84,42 +84,6 @@ func writeManager (filepath string, solutionsChan chan [ ] complex128, writeChan
 
 
 
-func emitWrites (solutionsChan chan [ ] complex128, precision int8, writeChan chan uint64) {
-
-	args := appArguments {
-		precision:  precision,
-		dimensions: Interval2d(-10, 10, -10, 10),
-	}
-
-	for solutions := range solutionsChan {
-		for _, solution := range solutions {
-
-			encoded, err := processSolution(solution, args)
-
-			if err != nil {
-				panic("aarrgghh!")
-			}
-
-			writeChan <- encoded
-
-		}
-	}
-
-}
-
-
-
-
-
-func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, precision int8, logger *Emitter.Emitter) {
-
-	writeChan := make(chan uint64, 100)
-
-	go writeManager(filepath, solutionsChan, writeChan)
-	go emitWrites(solutionsChan, precision, writeChan)
-
-}
-
 func startSolutionWorkers (extreme int, order int, precision int8, logger *Emitter.Emitter) (chan [ ] complex128, *sync.WaitGroup) {
 
 	processes := 20
@@ -216,44 +180,6 @@ func SolvePolynomials (extreme int, order int, filepath string, precision int8) 
 
 }
 
-func readGeocodeSolutions (solutionConn *os.File) (chan error, chan geohash2d) {
-
-	buffer    := make([ ] byte, 8)
-	solutions := make(chan geohash2d, 1)
-	errs      := make(chan error, 1)
-
-	go func ( ) {
-
-		for {
-
-			count, err := solutionConn.Read(buffer)
-
-			if err != nil && err != io.EOF {
-				errs <- err
-			}
-
-			if count != 8 {
-				break
-			}
-
-			solution, err := Uint64AsGeohash2d(8, binary.LittleEndian.Uint64(buffer))
-
-			if err != nil {
-				errs <- err
-			} else {
-				solutions <- solution
-			}
-
-		}
-
-		close(solutions)
-		close(errs)
-
-	}( )
-
-	return errs, solutions
-
-}
 
 
 
