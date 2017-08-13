@@ -13,7 +13,7 @@
 - [x] continuous testing
 - [ ] godoc
 - [ ] snap packaging
-- [ ] logging
+- [x] logging
 - [ ] real-time rate-estimation
 - [ ] standard image output
 - [ ] geocode image output
