@@ -172,7 +172,8 @@ func SolvePolynomials (extreme int, order int, filepath string, precision int8) 
 	logger = Emitter.Construct( )
 
 	solutionsChan, solveGroup := startSolutionWorkers(extreme, order, precision, logger)
-	writeGeocodeSolutions(filepath, solutionsChan, precision, logger)
+//	writeGeocodeSolutions(filepath, solutionsChan, precision, logger)
+	writeCartesianSolutions(filepath, solutionsChan, precision, logger)
 
 	solveGroup.Wait( )
 

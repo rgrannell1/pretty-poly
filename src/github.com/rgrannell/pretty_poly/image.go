@@ -48,3 +48,16 @@ func (graph PolynomialImage) Set(hash geohash2d, interval interval2d) {
 	graph.content.Set(int(solution.x), int(solution.y), colour)
 
 }
+
+func (graph PolynomialImage) SetPoint(point point2d) {
+
+	colour := color.RGBA {
+		255,
+		0,
+		0,
+		255,
+	}
+
+	graph.content.Set(int(point.x), int(point.y), colour)
+
+}
