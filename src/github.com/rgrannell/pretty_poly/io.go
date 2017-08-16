@@ -5,6 +5,7 @@ import "io"
 import "os"
 import "fmt"
 import "bufio"
+import "strconv"
 import "encoding/binary"
 import "github.com/alash3al/goemitter"
 
@@ -44,7 +45,7 @@ func writeGeocodeManager (filepath string, solutionsChan chan [ ] complex128, wr
 
 
 
-
+/*
 func emitGeocodeWrites (solutionsChan chan [ ] complex128, precision int8, writeChan chan uint64) {
 
 	dimensions := Interval2d(-10, 10, -10, 10)
@@ -74,11 +75,13 @@ func emitGeocodeWrites (solutionsChan chan [ ] complex128, precision int8, write
 }
 
 
+*/
+
+
 
 
 /*
 	given a
-*/
 
 func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, precision int8, logger *Emitter.Emitter) {
 
@@ -89,12 +92,13 @@ func writeGeocodeSolutions (filepath string, solutionsChan chan [ ] complex128, 
 
 }
 
+*/
+
 
 
 
 
 func writeCartesianManager (filepath string, solutionsChan chan [ ] complex128, writeChan chan complex128) {
-
 	conn, err := os.Create(filepath)
 	defer conn.Close( )
 
@@ -109,7 +113,8 @@ func writeCartesianManager (filepath string, solutionsChan chan [ ] complex128, 
 
 	for solution := range writeChan {
 
-		writer.WriteString(fmt.Sprintf("%f+%fi\n", real(solution), imag(solution)))
+		writer.WriteString(fmt.Sprintf("%f\n", real(solution)))
+		writer.WriteString(fmt.Sprintf("%f\n", imag(solution)))
 		count++
 
 	}
@@ -147,31 +152,47 @@ func writeCartesianSolutions (filepath string, solutionsChan chan [ ] complex128
 
 
 
-func readCartesianSolutions (solutionConn *os.File) (chan error, chan complex128) {
+func readCartesianSolutions (solutionConn *os.File) (chan error, chan float64) {
 
-	solutions := make(chan complex128, 1)
+	solutions := make(chan float64, 1)
 	errs      := make(chan error, 1)
+
+	reader := bufio.NewReader(solutionConn)
 
 	go func ( ) {
 
 		for {
 
-			count, err := solutionConn.Read(buffer)
+			realString, realErr := reader.ReadString('\n')
+			imagString, imagErr := reader.ReadString('\n')
 
-			if err != nil && err != io.EOF {
-				errs <- err
+			if realErr != nil && realErr != io.EOF {
+				errs <- realErr
+				return
 			}
 
-			if count != 8 {
-				break
+			if imagErr != nil && imagErr != io.EOF {
+				errs <- imagErr
+				return
 			}
 
-			solution, err := Uint64AsGeohash2d(8, binary.LittleEndian.Uint64(buffer))
+			if realErr != nil && imagErr != nil {
 
-			if err != nil {
-				errs <- err
-			} else {
-				solutions <- solution
+				realPart, realParseErr := strconv.ParseFloat(realString, 64)
+				imagPart, imagParseErr := strconv.ParseFloat(imagString, 64)
+
+				if realParseErr != nil {
+					errs <- realParseErr
+					return
+				}
+
+				if imagParseErr != nil {
+					errs <- imagParseErr
+					return
+				}
+
+				solutions <- realPart + imagPart
+
 			}
 
 		}
