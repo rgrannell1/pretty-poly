@@ -289,7 +289,7 @@ func DrawImage (solutionPath string, precision float64) error {
 
 	logger.EmitSync("EVENT_DRAW_IMAGE")
 
-	errs, solutions := readGeocodeSolutions(solutionConn)
+	errs, solutions := readCartesianSolutions(solutionConn)
 
 	for {
 
@@ -303,7 +303,7 @@ func DrawImage (solutionPath string, precision float64) error {
 				solutions = nil
 			}
 
-			img.Set(solution, dimensions)
+			img.SetComplex(solution, dimensions)
 		}
 
 		if solutions == nil {

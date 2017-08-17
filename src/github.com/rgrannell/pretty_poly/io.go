@@ -152,9 +152,9 @@ func writeCartesianSolutions (filepath string, solutionsChan chan [ ] complex128
 
 
 
-func readCartesianSolutions (solutionConn *os.File) (chan error, chan float64) {
+func readCartesianSolutions (solutionConn *os.File) (chan error, chan complex128) {
 
-	solutions := make(chan float64, 1)
+	solutions := make(chan complex128, 1)
 	errs      := make(chan error, 1)
 
 	reader := bufio.NewReader(solutionConn)
@@ -176,7 +176,9 @@ func readCartesianSolutions (solutionConn *os.File) (chan error, chan float64) {
 				return
 			}
 
-			if realErr != nil && imagErr != nil {
+			if realString == "" || imagString == "" {
+
+			} else if realErr != nil && imagErr != nil {
 
 				realPart, realParseErr := strconv.ParseFloat(realString, 64)
 				imagPart, imagParseErr := strconv.ParseFloat(imagString, 64)
@@ -191,7 +193,7 @@ func readCartesianSolutions (solutionConn *os.File) (chan error, chan float64) {
 					return
 				}
 
-				solutions <- realPart + imagPart
+				solutions <- complex(realPart, imagPart)
 
 			}
 

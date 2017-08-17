@@ -4,6 +4,7 @@ package pretty_poly
 
 
 
+import "math"
 import "image"
 import "image/color"
 
@@ -59,5 +60,36 @@ func (graph PolynomialImage) SetPoint(point point2d) {
 	}
 
 	graph.content.Set(int(point.x), int(point.y), colour)
+
+}
+
+func (graph PolynomialImage) SetComplex(solution complex128, interval interval2d) {
+
+	realPart := real(solution)
+	imagPart := imag(solution)
+
+	colour := color.RGBA {
+		255,
+		0,
+		0,
+		255,
+	}
+
+	xMin := interval.x.lower
+	yMin := interval.y.lower
+
+	xMax := interval.x.upper
+	yMax := interval.y.upper
+
+	xDiff := xMax - xMin
+	yDiff := yMax - yMin
+
+	xPercent := (realPart - xMin) / xDiff
+	yPercent := (imagPart - yMin) / yDiff
+
+	x := math.Floor(xPercent * xMax)
+	y := math.Floor(yPercent * yMax)
+
+	graph.content.Set(int(x), int(y), colour)
 
 }
